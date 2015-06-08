@@ -1,0 +1,10 @@
+html body canvas{
+  margin:  0px;
+  padding: 0px;
+}
+
+canvas{
+  position: absolute;
+  left: 0px;
+  top:  0px;
+}
