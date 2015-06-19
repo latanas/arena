@@ -1,23 +1,38 @@
 /*
   Project: Frontliner
   Author:  Atanas Laskov
+
+  http://www.atanaslaskov.com/frontliner/
 */
+
+/// <reference path="vector2.ts" />
 
 class Spaceship{
   public position: number;
   public speed: number;
+  public shotSpeed: number;
 
   private inputDirection: number;
+
+  private triggerShot: any;
+  private shotPosition: Vector2;
+  private shotAngle: number;
 
   constructor(p: number) {
     this.position = p;
     this.speed = Math.PI*0.001;
+    this.shotSpeed = -1.0;
+    this.triggerShot = false;
+    this.shotPosition = null;
 
     this.inputDirection = 0;
     document.addEventListener('keydown', (e) => {
       if( e.keyCode == 37 ) this.inputDirection = +1;
       if( e.keyCode == 39 ) this.inputDirection = -1;
+      if( e.keyCode == 32 ) this.triggerShot = true;
+      //console.log(e.keyCode);
     });
+
     document.addEventListener('keyup', (e) => {
       if( e.keyCode == 37 ) this.inputDirection = 0;
       if( e.keyCode == 39 ) this.inputDirection = 0;
@@ -26,12 +41,29 @@ class Spaceship{
 
   public render = (context: any, x: number, y: number) => {
     context.beginPath();
-    context.arc( x, y, 10, 0, 2*Math.PI );
+    context.arc( x, y, 20, 0, 2*Math.PI );
     context.stroke();
+
+    if( this.shotPosition ) {
+      context.beginPath();
+      context.arc( this.shotPosition.x, this.shotPosition.y, 5, 0, 2*Math.PI );
+      context.fill();
+    }
+
+    if( this.triggerShot ) {
+      this.shotPosition = new Vector2();
+      this.shotPosition.x = x;
+      this.shotPosition.y = y;
+      this.shotAngle = this.position;
+      this.triggerShot = false;
+    }
   }
 
   public animate = (dt: number) => {
-    //console.log(this.inputDirection);
     this.position += dt * this.speed * this.inputDirection;
+    if( this.shotPosition ) {
+      this.shotPosition.x += dt * this.shotSpeed * Math.cos(this.shotAngle);
+      this.shotPosition.y += dt * this.shotSpeed * Math.sin(this.shotAngle);
+    }
   }
 }

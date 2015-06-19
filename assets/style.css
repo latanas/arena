@@ -8,3 +8,10 @@ canvas{
   left: 0px;
   top:  0px;
 }
+
+.help_window{
+  z-index:  999;
+  position: fixed;
+  left: 50px;
+  top:  50px;
+}

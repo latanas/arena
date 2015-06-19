@@ -1,6 +1,8 @@
 /*
   Project: Frontliner
   Author:  Atanas Laskov
+
+  http://www.atanaslaskov.com/frontliner/
 */
 
 /// <reference path="spaceship.ts" />
