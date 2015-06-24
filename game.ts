@@ -5,7 +5,8 @@
   http://www.atanaslaskov.com/frontliner/
 */
 
-/// <reference path="spaceship.ts" />
+/// <reference path="player_spaceship.ts" />
+/// <reference path="enemy_spaceship.ts" />
 
 class Game{
   private context: any;
@@ -13,9 +14,8 @@ class Game{
   private width:  number;
   private height: number;
 
-  ship: Spaceship;
-
-  timePrevious: number;
+  private ship_list: any[];
+  private timePrevious: number;
 
   // Initialize canvas
   constructor() {
@@ -28,9 +28,12 @@ class Game{
     document.body.appendChild(c);
 
     this.context = c.getContext("2d");
-    this.ship = new Spaceship(Math.PI/2.0);
-
     this.timePrevious = window.performance.now();
+
+    this.ship_list = [
+      new PlayerSpaceship(Math.PI/2.0),
+      new EnemySpaceship(-Math.PI/2.0),
+    ];
   }
 
   // Render frame
@@ -51,10 +54,15 @@ class Game{
     c.arc( x, y, radius, 0, 2*Math.PI );
     c.stroke();
 
-    var ship_x = Math.cos(this.ship.position)*radius + x;
-    var ship_y = Math.sin(this.ship.position)*radius + y;
-    this.ship.render(c, ship_x, ship_y);
-    this.ship.animate(dt);
+    for( var i=0; i<this.ship_list.length; i++) {
+      var s = this.ship_list[i];
+
+      var ship_x = Math.cos(s.position)*radius + x;
+      var ship_y = Math.sin(s.position)*radius + y;
+
+      s.render(c, ship_x, ship_y);
+      s.animate(dt);
+    }
 
     window.requestAnimationFrame(this.render);
   }

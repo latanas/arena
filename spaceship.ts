@@ -12,11 +12,11 @@ class Spaceship{
   public speed: number;
   public shotSpeed: number;
 
-  private inputDirection: number;
+  protected moveDirection: number;
 
-  private triggerShot: any;
-  private shotPosition: Vector2;
-  private shotAngle: number;
+  protected triggerShot: boolean;
+  protected shotPosition: Vector2;
+  protected shotAngle: number;
 
   constructor(p: number) {
     this.position = p;
@@ -24,22 +24,10 @@ class Spaceship{
     this.shotSpeed = -1.0;
     this.triggerShot = false;
     this.shotPosition = null;
-
-    this.inputDirection = 0;
-    document.addEventListener('keydown', (e) => {
-      if( e.keyCode == 37 ) this.inputDirection = +1;
-      if( e.keyCode == 39 ) this.inputDirection = -1;
-      if( e.keyCode == 32 ) this.triggerShot = true;
-      //console.log(e.keyCode);
-    });
-
-    document.addEventListener('keyup', (e) => {
-      if( e.keyCode == 37 ) this.inputDirection = 0;
-      if( e.keyCode == 39 ) this.inputDirection = 0;
-    });
+    this.moveDirection = 0;
   }
 
-  public render = (context: any, x: number, y: number) => {
+  public render(context: any, x: number, y: number) {
     context.beginPath();
     context.arc( x, y, 20, 0, 2*Math.PI );
     context.stroke();
@@ -59,8 +47,8 @@ class Spaceship{
     }
   }
 
-  public animate = (dt: number) => {
-    this.position += dt * this.speed * this.inputDirection;
+  public animate(dt: number) {
+    this.position += dt * this.speed * this.moveDirection;
     if( this.shotPosition ) {
       this.shotPosition.x += dt * this.shotSpeed * Math.cos(this.shotAngle);
       this.shotPosition.y += dt * this.shotSpeed * Math.sin(this.shotAngle);
