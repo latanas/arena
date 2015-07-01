@@ -1,6 +1,7 @@
 /*
-  Project: Frontliner
+  Project: Frontliner, Action/tactics game
   Author:  Atanas Laskov
+  License: BSD license, see LICENSE for more details.
 
   http://www.atanaslaskov.com/frontliner/
 */
@@ -27,9 +28,9 @@ class Spaceship{
     this.moveDirection = 0;
   }
 
-  public render(context: any, x: number, y: number) {
+  public render(context: any, p2: Vector2) {
     context.beginPath();
-    context.arc( x, y, 20, 0, 2*Math.PI );
+    context.arc( p2.x, p2.y, 20, 0, 2*Math.PI );
     context.stroke();
 
     if( this.shotPosition ) {
@@ -39,9 +40,7 @@ class Spaceship{
     }
 
     if( this.triggerShot ) {
-      this.shotPosition = new Vector2();
-      this.shotPosition.x = x;
-      this.shotPosition.y = y;
+      this.shotPosition = p2;
       this.shotAngle = this.position;
       this.triggerShot = false;
     }

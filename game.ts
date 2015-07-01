@@ -1,10 +1,12 @@
 /*
-  Project: Frontliner
+  Project: Frontliner, Action/tactics game
   Author:  Atanas Laskov
+  License: BSD license, see LICENSE for more details.
 
   http://www.atanaslaskov.com/frontliner/
 */
 
+/// <reference path="arena.ts" />
 /// <reference path="player_spaceship.ts" />
 /// <reference path="enemy_spaceship.ts" />
 
@@ -14,7 +16,9 @@ class Game{
   private width:  number;
   private height: number;
 
+  private arena: Arena;
   private ship_list: any[];
+
   private timePrevious: number;
 
   // Initialize canvas
@@ -30,6 +34,12 @@ class Game{
     this.context = c.getContext("2d");
     this.timePrevious = window.performance.now();
 
+    var spacing = 100;
+    var radius = (Math.min( this.width, this.height ) - spacing)/2.0;
+    var x:number = radius + (this.width - radius*2.0)/2.0;
+    var y:number = radius + (this.height - radius*2.0)/2.0;
+    this.arena = new Arena( new Vector2(x,y), radius );
+
     this.ship_list = [
       new PlayerSpaceship(Math.PI/2.0),
       new EnemySpaceship(-Math.PI/2.0),
@@ -44,23 +54,15 @@ class Game{
 
     var c = this.context;
 
-    var spacing = 100;
-    var radius = (Math.min( this.width, this.height ) - spacing)/2.0;
-    var x = radius + (this.width - radius*2.0)/2.0;
-    var y = radius + (this.height - radius*2.0)/2.0;
-
     c.clearRect(0, 0, this.width, this.height);
-    c.beginPath();
-    c.arc( x, y, radius, 0, 2*Math.PI );
-    c.stroke();
+    this.arena.render(c);
+    this.arena.animate(dt);
 
     for( var i=0; i<this.ship_list.length; i++) {
       var s = this.ship_list[i];
+      var p2 = this.arena.getVector( s.position, this.arena.radius - 50 )
 
-      var ship_x = Math.cos(s.position)*radius + x;
-      var ship_y = Math.sin(s.position)*radius + y;
-
-      s.render(c, ship_x, ship_y);
+      s.render(c, p2);
       s.animate(dt);
     }
 
