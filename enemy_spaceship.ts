@@ -1,17 +1,20 @@
 /*
   Project: Frontliner, Action/tactics game
-  Author:  Atanas Laskov
-  License: BSD license, see LICENSE for more details.
+  Author:  Copyright (C) 2015, Atanas Laskov
+
+  License: BSD license, see LICENSE.md for more details.
 
   http://www.atanaslaskov.com/frontliner/
 */
 
 /// <reference path="spaceship.ts" />
 
+// Enemy spacheship, controled by the computer
+//
 class EnemySpaceship extends Spaceship{
   private dtDirectionChagne: number;
 
-  constructor(p: number) {
+  constructor(p: PolarCoordinate) {
     super(p)
 
     this.speed = this.speed/4.0;

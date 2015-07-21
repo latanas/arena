@@ -1,35 +1,31 @@
 /*
   Project: Frontliner, Action/tactics game
-  Author:  Atanas Laskov
-  License: BSD license, see LICENSE for more details.
+  Author:  Copyright (C) 2015, Atanas Laskov
+
+  License: BSD license, see LICENSE.md for more details.
 
   http://www.atanaslaskov.com/frontliner/
 */
 
-/// <reference path="vector2.ts" />
+/// <reference path="vector.ts" />
 
+// Gameplay arena
+//
 class Arena{
-  public position: Vector2;
+  public origin: Vector;
   public radius: number;
 
-  constructor(p:Vector2, r:number) {
-    this.position = p;
+  constructor(o:Vector, r:number) {
+    this.origin = o;
     this.radius = r;
-  }
-
-  public render(context: any) {
-    context.beginPath();
-    context.arc( this.position.x, this.position.y, this.radius, 0, 2*Math.PI );
-    context.stroke();
   }
 
   public animate(dt: number) {
   }
 
-  public getVector(angle: number, distance: number): Vector2 {
-    return new Vector2(
-      this.position.x + Math.cos(angle)*distance,
-      this.position.y + Math.sin(angle)*distance
-    );
+  public render(context: any) {
+    context.beginPath();
+    context.arc( this.origin.x, this.origin.y, this.radius, 0, 2*Math.PI );
+    context.stroke();
   }
 }

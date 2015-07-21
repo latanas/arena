@@ -1,12 +1,13 @@
 /*
   Project: Frontliner, Action/tactics game
-  Author:  Atanas Laskov
-  License: BSD license, see LICENSE for more details.
+  Author:  Copyright (C) 2015, Atanas Laskov
+
+  License: BSD license, see LICENSE.md for more details.
 
   http://www.atanaslaskov.com/frontliner/
 */
 
 /// <reference path="game.ts" />
 
-var game = new Game();
-game.render();
+var g = new Game();
+g.animationFrame();

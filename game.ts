@@ -1,7 +1,8 @@
 /*
   Project: Frontliner, Action/tactics game
-  Author:  Atanas Laskov
-  License: BSD license, see LICENSE for more details.
+  Author:  Copyright (C) 2015, Atanas Laskov
+
+  License: BSD license, see LICENSE.md for more details.
 
   http://www.atanaslaskov.com/frontliner/
 */
@@ -10,18 +11,26 @@
 /// <reference path="player_spaceship.ts" />
 /// <reference path="enemy_spaceship.ts" />
 
+/// <reference path="vector.ts" />
+/// <reference path="polar_coordinate.ts" />
+
+// Game class initializes the graphics and manages game objects
+//
 class Game{
+  // Renderer
   private context: any;
+  private width:   number;
+  private height:  number;
 
-  private width:  number;
-  private height: number;
+  // Animation clock
+  private clock: number;
 
+  // Gameplay arena, ships and projectiles
   private arena: Arena;
   private ship_list: any[];
 
-  private timePrevious: number;
-
-  // Initialize canvas
+  // Initialize game
+  //
   constructor() {
     this.width  = window.innerWidth;
     this.height = window.innerHeight;
@@ -32,40 +41,42 @@ class Game{
     document.body.appendChild(c);
 
     this.context = c.getContext("2d");
-    this.timePrevious = window.performance.now();
+    this.clock = window.performance.now();
 
     var spacing = 100;
     var radius = (Math.min( this.width, this.height ) - spacing)/2.0;
     var x:number = radius + (this.width - radius*2.0)/2.0;
     var y:number = radius + (this.height - radius*2.0)/2.0;
-    this.arena = new Arena( new Vector2(x,y), radius );
+
+    this.arena = new Arena( new Vector(x,y), radius );
 
     this.ship_list = [
-      new PlayerSpaceship(Math.PI/2.0),
-      new EnemySpaceship(-Math.PI/2.0),
+      new PlayerSpaceship( new PolarCoordinate(Math.PI/2.0, radius-100) ),
+      new EnemySpaceship( new PolarCoordinate(-Math.PI/2.0, radius-100) ),
     ];
   }
 
-  // Render frame
-  render = () => {
+  // Animation frame
+  //
+  animationFrame = () => {
     var t  = window.performance.now();
-    var dt = t - this.timePrevious;
-    this.timePrevious = t;
+    var dt = t - this.clock;
+    this.clock = t;
 
     var c = this.context;
-
     c.clearRect(0, 0, this.width, this.height);
+
+    // Render and animate gameplay arena
     this.arena.render(c);
     this.arena.animate(dt);
 
+    // Render and animate ships
     for( var i=0; i<this.ship_list.length; i++) {
       var s = this.ship_list[i];
-      var p2 = this.arena.getVector( s.position, this.arena.radius - 50 )
-
-      s.render(c, p2);
+      s.render(c, this.arena.origin);
       s.animate(dt);
     }
 
-    window.requestAnimationFrame(this.render);
+    window.requestAnimationFrame( this.animationFrame );
   }
 }

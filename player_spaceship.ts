@@ -1,15 +1,18 @@
 /*
   Project: Frontliner, Action/tactics game
-  Author:  Atanas Laskov
-  License: BSD license, see LICENSE for more details.
+  Author:  Copyright (C) 2015, Atanas Laskov
+
+  License: BSD license, see LICENSE.md for more details.
 
   http://www.atanaslaskov.com/frontliner/
 */
 
 /// <reference path="spaceship.ts" />
 
+// Player controled spaceship
+//
 class PlayerSpaceship extends Spaceship{
-  constructor(p: number) {
+  constructor(p: PolarCoordinate) {
     super(p);
 
     document.addEventListener('keydown', (e) => {
