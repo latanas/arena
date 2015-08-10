@@ -73,6 +73,7 @@ class Game{
     // Render and animate ships
     for( var i=0; i<this.ship_list.length; i++) {
       var s = this.ship_list[i];
+      s.position.radius = this.arena.radius_at( s.position.angle )-50;
       s.render(c, this.arena.origin);
       s.animate(dt);
     }

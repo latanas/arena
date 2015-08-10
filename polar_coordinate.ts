@@ -15,9 +15,9 @@ class PolarCoordinate{
   public angle:  number;
   public radius: number;
 
-  constructor(a:number, r:number) {
-    this.angle  = a;
-    this.radius = r;
+  constructor(angle:number, radius:number) {
+    this.angle  = angle;
+    this.radius = radius;
   }
 
   public copy(): PolarCoordinate {
@@ -29,5 +29,16 @@ class PolarCoordinate{
       Math.cos(this.angle)*this.radius,
       Math.sin(this.angle)*this.radius
     );
+  }
+}
+
+// Polar coordinate with an area of effect arount it (areal)
+//
+class PolarCoordinateAreal extends PolarCoordinate{
+  public areal: number;
+
+  constructor(angle:number, radius:number, areal:number) {
+    super(angle,radius);
+    this.areal = areal;
   }
 }
