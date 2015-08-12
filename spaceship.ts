@@ -9,18 +9,17 @@
 
 /// <reference path="vector.ts" />
 /// <reference path="polar_coordinate.ts" />
+/// <reference path="arena_object.ts" />
 
-class Spaceship{
-  protected position:     PolarCoordinate;
-  protected shotPosition: PolarCoordinate;
-
-  //public position: number;
+class Spaceship implements ArenaObject{
   public speed: number;
-  public shotSpeed: number;
+  public position: PolarCoordinate;
 
   protected moveDirection: number;
+
   protected triggerShot: boolean;
-  //protected shotAngle: number;
+  protected shotPosition: PolarCoordinate;
+  protected shotSpeed: number;
 
   constructor(p: PolarCoordinate) {
     this.position = p;
@@ -41,7 +40,6 @@ class Spaceship{
 
     if( this.triggerShot ) {
       this.shotPosition = this.position.copy();
-      //this.shotAngle = this.position;
       this.triggerShot = false;
     }
   }

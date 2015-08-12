@@ -7,27 +7,25 @@
   http://www.atanaslaskov.com/frontliner/
 */
 
-/// <reference path="arena.ts" />
-/// <reference path="player_spaceship.ts" />
-/// <reference path="enemy_spaceship.ts" />
-
 /// <reference path="vector.ts" />
 /// <reference path="polar_coordinate.ts" />
 
-// Game class initializes the graphics and manages game objects
+/// <reference path="arena.ts" />
+/// <reference path="dynamic_object.ts" />
+/// <reference path="player_spaceship.ts" />
+/// <reference path="enemy_spaceship.ts" />
+
+// Game class initializes and manages the game objects
 //
 class Game{
-  // Renderer
-  private context: any;
+  // Renderer and animation clock
+  private context: CanvasRenderingContext2D;
   private width:   number;
   private height:  number;
+  private clock:   number;
 
-  // Animation clock
-  private clock: number;
-
-  // Gameplay arena, ships and projectiles
   private arena: Arena;
-  private ship_list: any[];
+  private dynamicObjects: DynamicObject[];
 
   // Initialize game
   //
@@ -40,7 +38,7 @@ class Game{
     c.height = this.height;
     document.body.appendChild(c);
 
-    this.context = c.getContext("2d");
+    this.context = <CanvasRenderingContext2D> c.getContext("2d");
     this.clock = window.performance.now();
 
     var spacing = 100;
@@ -50,7 +48,7 @@ class Game{
 
     this.arena = new Arena( new Vector(x,y), radius );
 
-    this.ship_list = [
+    this.dynamicObjects = [
       new PlayerSpaceship( new PolarCoordinate(Math.PI/2.0, radius-100) ),
       new EnemySpaceship( new PolarCoordinate(-Math.PI/2.0, radius-100) ),
     ];
@@ -71,8 +69,8 @@ class Game{
     this.arena.animate(dt);
 
     // Render and animate ships
-    for( var i=0; i<this.ship_list.length; i++) {
-      var s = this.ship_list[i];
+    for( var i=0; i<this.dynamicObjects.length; i++) {
+      var s = this.dynamicObjects[i];
       s.position.radius = this.arena.radius_at( s.position.angle )-50;
       s.render(c, this.arena.origin);
       s.animate(dt);

@@ -15,7 +15,7 @@ class EnemySpaceship extends Spaceship{
   private dtDirectionChagne: number;
 
   constructor(p: PolarCoordinate) {
-    super(p)
+    super(p);
 
     this.speed = this.speed/4.0;
     this.moveDirection = +1;

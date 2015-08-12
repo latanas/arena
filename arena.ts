@@ -16,21 +16,26 @@ class Arena{
   public origin: Vector;
   public radius: number;
 
-  private inflection_points: PolarCoordinateAreal[];
-  private computed_step:  number;
-  private computed_rads:  number[];
+  private inflectionPoints: PolarCoordinateAreal[];
 
-  // Construct arena
+  private computedStep:      number;
+  private computedRadiuses:  number[];
+
+  // Construct the arena
   constructor(o:Vector, r:number) {
     this.origin = o;
     this.radius = r;
 
     // Add some inflection points
-    this.inflection_points = [
+    this.inflectionPoints = [
+      new PolarCoordinateAreal(Math.PI*0.0, r*1.2, Math.PI * 0.1),
+      new PolarCoordinateAreal(Math.PI*0.2, r*0.9, Math.PI * 0.1),
+      new PolarCoordinateAreal(Math.PI*0.5, r*0.9, Math.PI * 0.1),
+      new PolarCoordinateAreal(Math.PI*0.8, r*0.9, Math.PI * 0.1),
       new PolarCoordinateAreal(Math.PI*1.0, r*1.2, Math.PI * 0.1),
-      new PolarCoordinateAreal(Math.PI*1.5, r*0.8, Math.PI * 0.1),
+      new PolarCoordinateAreal(Math.PI*1.5, r*0.9, Math.PI * 0.3),
     ]
-    this.computed_step = Math.PI*0.01;
+    this.computedStep = Math.PI*0.01;
     this.compute();
   }
 
@@ -39,7 +44,7 @@ class Arena{
     angle = angle % (Math.PI * 2.0);
     if( angle < 0 ) angle += Math.PI * 2.0;
 
-    var ips = this.inflection_points;
+    var ips = this.inflectionPoints;
     var r = this.radius;
 
     // For each of the inflection points, calculate its weight
@@ -47,7 +52,8 @@ class Arena{
       var ip = ips[i];
 
       var weight = 0.0;
-      var distance = Math.abs(ip.angle-angle) / ip.areal;
+      var d1 = Math.abs(ip.angle-angle), d2 = Math.abs(ip.angle-angle+Math.PI*2.0);
+      var distance = Math.min(d1,d2) / ip.areal;
 
       if( distance <= 1.0 ) {
         // Use the sine, an easy way to fit a smooth curve around the inflection point
@@ -60,9 +66,9 @@ class Arena{
 
   // Compute the radius at incremental steps
   public compute() {
-    this.computed_rads = [];
-    for( var a=0; a<=Math.PI*2.0-this.computed_step; a+=this.computed_step ) {
-      this.computed_rads.push( this.radius_at(a) );
+    this.computedRadiuses = [];
+    for( var a=0; a<=Math.PI*2.0-this.computedStep; a+=this.computedStep ) {
+      this.computedRadiuses.push( this.radius_at(a) );
     }
   }
 
@@ -72,8 +78,8 @@ class Arena{
 
   // Render the arena
   public render(context: any) {
-    var ps = this.computed_step;
-    var pr = this.computed_rads;
+    var ps = this.computedStep;
+    var pr = this.computedRadiuses;
     var angle = 0;
 
     // Render precomputed outline
@@ -95,8 +101,8 @@ class Arena{
     context.stroke();
 
     // Render the inflection points, for debugging
-    for( var n=0; n<this.inflection_points.length; n++ ) {
-      var ipv = Vector.plus( this.origin, this.inflection_points[ n ].vector() );
+    for( var n=0; n<this.inflectionPoints.length; n++ ) {
+      var ipv = Vector.plus( this.origin, this.inflectionPoints[ n ].vector() );
 
       context.beginPath();
       context.arc( ipv.x, ipv.y, 5, 0, 2*Math.PI );
