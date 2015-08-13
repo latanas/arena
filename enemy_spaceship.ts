@@ -1,10 +1,10 @@
 /*
-  Project: Frontliner, Action/tactics game
+  Project: Arena game
   Author:  Copyright (C) 2015, Atanas Laskov
 
   License: BSD license, see LICENSE.md for more details.
 
-  http://www.atanaslaskov.com/frontliner/
+  http://www.atanaslaskov.com/arena/
 */
 
 /// <reference path="spaceship.ts" />

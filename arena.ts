@@ -1,10 +1,10 @@
 /*
-  Project: Frontliner, Action/tactics game
+  Project: Arena game
   Author:  Copyright (C) 2015, Atanas Laskov
 
   License: BSD license, see LICENSE.md for more details.
 
-  http://www.atanaslaskov.com/frontliner/
+  http://www.atanaslaskov.com/arena/
 */
 
 /// <reference path="vector.ts" />
@@ -39,8 +39,8 @@ class Arena{
     this.compute();
   }
 
-  // Get the radius of the arena at the given apolar coordinate
-  public radius_at(angle: number) {
+  // Get the radius of the arena at the given polar coordinate
+  public radiusAt(angle: number) {
     angle = angle % (Math.PI * 2.0);
     if( angle < 0 ) angle += Math.PI * 2.0;
 
@@ -68,7 +68,7 @@ class Arena{
   public compute() {
     this.computedRadiuses = [];
     for( var a=0; a<=Math.PI*2.0-this.computedStep; a+=this.computedStep ) {
-      this.computedRadiuses.push( this.radius_at(a) );
+      this.computedRadiuses.push( this.radiusAt(a) );
     }
   }
 
@@ -106,7 +106,7 @@ class Arena{
 
       context.beginPath();
       context.arc( ipv.x, ipv.y, 5, 0, 2*Math.PI );
-      context.fill();
+      context.stroke();
     }
   }
 }

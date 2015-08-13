@@ -1,8 +1,8 @@
-Frontliner
-==========
+Arena
+=====
 
 ### Build:
 
 npm install -g typescript
 
-tsc -out build/frontliner.js --sourcemap frontliner.ts
+tsc -out build/main.js --sourcemap main.ts

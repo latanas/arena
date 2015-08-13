@@ -1,10 +1,10 @@
 /*
-  Project: Frontliner, Action/tactics game
+  Project: Arena game
   Author:  Copyright (C) 2015, Atanas Laskov
 
   License: BSD license, see LICENSE.md for more details.
 
-  http://www.atanaslaskov.com/frontliner/
+  http://www.atanaslaskov.com/arena/
 */
 
 /// <reference path="vector.ts" />
@@ -71,7 +71,7 @@ class Game{
     // Render and animate ships
     for( var i=0; i<this.dynamicObjects.length; i++) {
       var s = this.dynamicObjects[i];
-      s.position.radius = this.arena.radius_at( s.position.angle )-50;
+      s.position.radius = this.arena.radiusAt( s.position.angle )-50;
       s.render(c, this.arena.origin);
       s.animate(dt);
     }

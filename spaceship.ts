@@ -1,17 +1,17 @@
 /*
-  Project: Frontliner, Action/tactics game
+  Project: Arena game
   Author:  Copyright (C) 2015, Atanas Laskov
 
   License: BSD license, see LICENSE.md for more details.
 
-  http://www.atanaslaskov.com/frontliner/
+  http://www.atanaslaskov.com/arena/
 */
 
 /// <reference path="vector.ts" />
 /// <reference path="polar_coordinate.ts" />
-/// <reference path="arena_object.ts" />
+/// <reference path="dynamic_object.ts" />
 
-class Spaceship implements ArenaObject{
+class Spaceship implements DynamicObject{
   public speed: number;
   public position: PolarCoordinate;
 
