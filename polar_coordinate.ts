@@ -15,7 +15,7 @@ class PolarCoordinate{
   public angle:  number;
   public radius: number;
 
-  constructor(angle:number, radius:number) {
+  constructor(angle:number =0, radius:number =0) {
     this.angle  = angle;
     this.radius = radius;
   }
@@ -37,7 +37,7 @@ class PolarCoordinate{
 class PolarCoordinateAreal extends PolarCoordinate{
   public areal: number;
 
-  constructor(angle:number, radius:number, areal:number) {
+  constructor(angle:number =0, radius:number =0, areal:number =0) {
     super(angle,radius);
     this.areal = areal;
   }

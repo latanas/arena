@@ -22,14 +22,14 @@ class EnemySpaceship extends Spaceship{
     this.dtDirectionChagne = 500.0;
   }
 
-  public animate(dt: number) {
-    super.animate(dt);
+  public animate(dt: number, origin_speed: number) {
+    super.animate(dt, origin_speed);
     this.dtDirectionChagne -= dt;
 
     if( this.dtDirectionChagne <= 0 ) {
       this.dtDirectionChagne = 1000.0;
       this.moveDirection = this.moveDirection * (-1);
-      this.triggerShot = true;
+      this.prepareAttack();
     }
   }
 }

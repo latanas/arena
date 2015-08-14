@@ -9,7 +9,7 @@
 
 /// <reference path="spaceship.ts" />
 
-// Player controled spaceship
+// Spaceship controled by the player
 //
 class PlayerSpaceship extends Spaceship{
   constructor(p: PolarCoordinate) {
@@ -18,7 +18,7 @@ class PlayerSpaceship extends Spaceship{
     document.addEventListener('keydown', (e) => {
       if( e.keyCode == 37 ) this.moveDirection = +1;
       if( e.keyCode == 39 ) this.moveDirection = -1;
-      if( e.keyCode == 32 ) this.triggerShot = true;
+      if( e.keyCode == 32 ) this.prepareAttack();
     });
 
     document.addEventListener('keyup', (e) => {

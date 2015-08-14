@@ -14,6 +14,7 @@
 /// <reference path="dynamic_object.ts" />
 /// <reference path="player_spaceship.ts" />
 /// <reference path="enemy_spaceship.ts" />
+/// <reference path="projectile.ts" />
 
 // Game class initializes and manages the game objects
 //
@@ -27,8 +28,6 @@ class Game{
   private arena: Arena;
   private dynamicObjects: DynamicObject[];
 
-  // Initialize game
-  //
   constructor() {
     this.width  = window.innerWidth;
     this.height = window.innerHeight;
@@ -50,7 +49,7 @@ class Game{
 
     this.dynamicObjects = [
       new PlayerSpaceship( new PolarCoordinate(Math.PI/2.0, radius-100) ),
-      new EnemySpaceship( new PolarCoordinate(-Math.PI/2.0, radius-100) ),
+      new EnemySpaceship( new PolarCoordinate(-Math.PI/2.0, radius-100) )
     ];
   }
 
@@ -64,18 +63,39 @@ class Game{
     var c = this.context;
     c.clearRect(0, 0, this.width, this.height);
 
-    // Render and animate gameplay arena
+    // Game arena
     this.arena.render(c);
     this.arena.animate(dt);
 
-    // Render and animate ships
+    // Dynamic objects
+    var dynamicObjectsRefresh = [];
+
     for( var i=0; i<this.dynamicObjects.length; i++) {
-      var s = this.dynamicObjects[i];
-      s.position.radius = this.arena.radiusAt( s.position.angle )-50;
-      s.render(c, this.arena.origin);
-      s.animate(dt);
+      var o = this.dynamicObjects[i];
+      o.render(c, this.arena.origin);
+      o.animate(dt, 0.0);
+
+      // Ask the object to follow arena contour
+      o.ask({ verb: "follow!", argument: this.arena.radiusAt( o.position.angle )-50 })
+
+      // Ask the object if it wants to attack
+      var attack = o.ask({verb: "attack?"});
+
+      // The object says "attack!" so it must give us a Projectile
+      if( attack.verb == "attack!") {
+        dynamicObjectsRefresh.push( <Projectile> attack.argument );
+      }
+
+      // Ask the object if it wants to be discarded
+      var discard = o.ask({verb: "discard?"});
+
+      // The object doesn't want to be discarded, put it on the refresh list
+      if( discard.verb != "discard!") {
+        dynamicObjectsRefresh.push( o );
+      }
     }
 
+    this.dynamicObjects = dynamicObjectsRefresh;
     window.requestAnimationFrame( this.animationFrame );
   }
 }

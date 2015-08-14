@@ -10,12 +10,23 @@
 /// <reference path="vector.ts" />
 /// <reference path="polar_coordinate.ts" />
 
+// Interface for a message
+//
+interface DynamicMessage{
+  verb: string;
+  argument?: any;
+}
+
 // Interface for dynamic objects in the game
 //
 interface DynamicObject{
-  speed: number;
-  position: PolarCoordinate;
+  speed:    number;
+  position: PolarCoordinateAreal;
 
-  animate(dt: number);
+  // Animate and render
+  animate(dt: number, origin_speed: number);
   render(context: any, origin: Vector);
+
+  // Ask politely
+  ask(sentence: DynamicMessage): DynamicMessage;
 }
