@@ -16,7 +16,7 @@
 /// <reference path="enemy_spaceship.ts" />
 /// <reference path="projectile.ts" />
 
-// Game class initializes and manages the game objects
+// Game initializes and manages the dynamic objects
 //
 class Game{
   // Renderer and animation clock

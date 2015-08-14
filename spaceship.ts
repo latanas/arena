@@ -11,7 +11,7 @@
 /// <reference path="polar_coordinate.ts" />
 /// <reference path="dynamic_object.ts" />
 
-// Base class for a Spaceship, player or computer controlled.
+// Base class for a spaceship
 //
 class Spaceship implements DynamicObject{
   public speed:    number;

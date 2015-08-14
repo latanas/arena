@@ -11,7 +11,7 @@
 /// <reference path="polar_coordinate.ts" />
 /// <reference path="dynamic_object.ts" />
 
-// Weapon projectile released by a Spaceship
+// Projectile released by a spaceship
 //
 class Projectile implements DynamicObject {
   public speed:    number;
@@ -44,7 +44,7 @@ class Projectile implements DynamicObject {
   }
 
   public ask(sentence: DynamicMessage): DynamicMessage {
-    // Sombody asked the Projectile if it's time to get discarded
+    // Somebody asked the Projectile if it's time to get discarded
     if( sentence.verb == "discard?" && this.ttl <= 0 ) {
       // Yes, time to live has expired.
       return { verb: "discard!" };
