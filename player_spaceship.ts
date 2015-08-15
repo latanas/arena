@@ -16,14 +16,14 @@ class PlayerSpaceship extends Spaceship{
     super(p);
 
     document.addEventListener('keydown', (e) => {
-      if( e.keyCode == 37 ) this.moveDirection = +1;
-      if( e.keyCode == 39 ) this.moveDirection = -1;
+      if( e.keyCode == 37 ) this.direction = +1;
+      if( e.keyCode == 39 ) this.direction = -1;
       if( e.keyCode == 32 ) this.prepareAttack();
     });
 
     document.addEventListener('keyup', (e) => {
-      if( e.keyCode == 37 ) this.moveDirection = 0;
-      if( e.keyCode == 39 ) this.moveDirection = 0;
+      if( e.keyCode == 37 ) this.direction = 0;
+      if( e.keyCode == 39 ) this.direction = 0;
     });
   }
 }

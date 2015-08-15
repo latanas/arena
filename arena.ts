@@ -8,6 +8,7 @@
 */
 
 /// <reference path="vector.ts" />
+/// <reference path="renderer.ts" />
 /// <reference path="polar_coordinate.ts" />
 
 // Gameplay arena
@@ -19,7 +20,7 @@ class Arena{
   private inflectionPoints: PolarCoordinateAreal[];
 
   private computedStep:      number;
-  private computedRadiuses:  number[];
+  private computedRadiuses:  PolarCoordinate[];
 
   // Construct the arena
   constructor(o:Vector, r:number) {
@@ -39,15 +40,16 @@ class Arena{
     this.compute();
   }
 
-  // Get the radius of the arena at the given polar coordinate
+  // Get radius at the given polar coordinate
   public radiusAt(angle: number) {
+    // Reduce angle
     angle = angle % (Math.PI * 2.0);
     if( angle < 0 ) angle += Math.PI * 2.0;
 
     var ips = this.inflectionPoints;
     var r = this.radius;
 
-    // For each of the inflection points, calculate its weight
+    // For each of the inflection points, calculate the weight
     for( var i=0; i<ips.length; i++ ) {
       var ip = ips[i];
 
@@ -68,7 +70,7 @@ class Arena{
   public compute() {
     this.computedRadiuses = [];
     for( var a=0; a<=Math.PI*2.0-this.computedStep; a+=this.computedStep ) {
-      this.computedRadiuses.push( this.radiusAt(a) );
+      this.computedRadiuses.push( new PolarCoordinate(a, this.radiusAt(a)) );
     }
   }
 
@@ -77,36 +79,21 @@ class Arena{
   }
 
   // Render the arena
-  public render(context: any) {
-    var ps = this.computedStep;
+  public render(renderer: Renderer) {
     var pr = this.computedRadiuses;
-    var angle = 0;
+    var ip = this.inflectionPoints;
+    var points = [];
 
     // Render precomputed outline
-    context.beginPath();
-    for( var i=0; i<pr.length; i++ ) {
-      var r1 = pr[i];
-      var r2 = pr[ (i==pr.length-1)? 0:i+1 ];
-
-      var p1 = new PolarCoordinate(angle, r1);
-      var p2 = new PolarCoordinate(angle+ps, r2);
-      angle += ps;
-
-      var v1 = Vector.plus( this.origin, p1.vector() );
-      var v2 = Vector.plus( this.origin, p2.vector() );
-
-      context.moveTo( v1.x, v1.y );
-      context.lineTo( v2.x, v2.y );
+    for( var i=0; i<=pr.length; i++ ) {
+      var p = pr[ (i==pr.length)? 0:i ];
+      points.push( Vector.plus(this.origin, p.vector()) );
     }
-    context.stroke();
+    renderer.polyline(points);
 
     // Render the inflection points, for debugging
-    for( var n=0; n<this.inflectionPoints.length; n++ ) {
-      var ipv = Vector.plus( this.origin, this.inflectionPoints[ n ].vector() );
-
-      context.beginPath();
-      context.arc( ipv.x, ipv.y, 5, 0, 2*Math.PI );
-      context.stroke();
+    for( var n=0; n<ip.length; n++ ) {
+      renderer.marker( Vector.plus(this.origin, ip[n].vector()), 5 );
     }
   }
 }

@@ -18,7 +18,7 @@ class EnemySpaceship extends Spaceship{
     super(p);
 
     this.speed = this.speed/4.0;
-    this.moveDirection = +1;
+    this.direction = +1;
     this.dtDirectionChagne = 500.0;
   }
 
@@ -28,7 +28,7 @@ class EnemySpaceship extends Spaceship{
 
     if( this.dtDirectionChagne <= 0 ) {
       this.dtDirectionChagne = 1000.0;
-      this.moveDirection = this.moveDirection * (-1);
+      this.direction = this.direction * (-1);
       this.prepareAttack();
     }
   }

@@ -10,6 +10,7 @@
 /// <reference path="vector.ts" />
 /// <reference path="polar_coordinate.ts" />
 /// <reference path="dynamic_object.ts" />
+/// <reference path="renderer.ts" />
 
 // Projectile released by a spaceship
 //
@@ -33,14 +34,11 @@ class Projectile implements DynamicObject {
     this.ttl -= dt;
   }
 
-  public render(context: any, origin: Vector) {
-    var v1 = Vector.plus( this.position.vector(), origin );
-    var v2 = Vector.plus( this.positionInitial.vector(), origin );
-
-    context.beginPath();
-    context.moveTo(v1.x, v1.y);
-    context.lineTo(v2.x, v2.y);
-    context.stroke();
+  public render(renderer: Renderer, origin: Vector) {
+    renderer.polyline([
+      Vector.plus( this.positionInitial.vector(), origin ),
+      Vector.plus( this.position.vector(), origin )
+    ]);
   }
 
   public ask(sentence: DynamicMessage): DynamicMessage {

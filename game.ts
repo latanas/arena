@@ -9,6 +9,7 @@
 
 /// <reference path="vector.ts" />
 /// <reference path="polar_coordinate.ts" />
+/// <reference path="renderer.ts" />
 
 /// <reference path="arena.ts" />
 /// <reference path="dynamic_object.ts" />
@@ -19,37 +20,21 @@
 // Game initializes and manages the dynamic objects
 //
 class Game{
-  // Renderer and animation clock
-  private context: CanvasRenderingContext2D;
-  private width:   number;
-  private height:  number;
-  private clock:   number;
+  private renderer: Renderer;
+  private clock: number;
 
   private arena: Arena;
   private dynamicObjects: DynamicObject[];
 
-  constructor() {
-    this.width  = window.innerWidth;
-    this.height = window.innerHeight;
-
-    var c = document.createElement("canvas");
-    c.width  = this.width;
-    c.height = this.height;
-    document.body.appendChild(c);
-
-    this.context = <CanvasRenderingContext2D> c.getContext("2d");
+  constructor(r: Renderer) {
+    this.renderer = r;
     this.clock = window.performance.now();
 
-    var spacing = 100;
-    var radius = (Math.min( this.width, this.height ) - spacing)/2.0;
-    var x:number = radius + (this.width - radius*2.0)/2.0;
-    var y:number = radius + (this.height - radius*2.0)/2.0;
-
-    this.arena = new Arena( new Vector(x,y), radius );
+    this.arena = new Arena( new Vector(0.0, 0.0), 0.5 );
 
     this.dynamicObjects = [
-      new PlayerSpaceship( new PolarCoordinate(Math.PI/2.0, radius-100) ),
-      new EnemySpaceship( new PolarCoordinate(-Math.PI/2.0, radius-100) )
+      new PlayerSpaceship( new PolarCoordinate(Math.PI/2.0, 0.5-0.05) ),
+      new EnemySpaceship( new PolarCoordinate(-Math.PI/2.0, 0.5-0.05) )
     ];
   }
 
@@ -60,11 +45,11 @@ class Game{
     var dt = t - this.clock;
     this.clock = t;
 
-    var c = this.context;
-    c.clearRect(0, 0, this.width, this.height);
+    var r = this.renderer;
+    r.background();
 
     // Game arena
-    this.arena.render(c);
+    this.arena.render(r);
     this.arena.animate(dt);
 
     // Dynamic objects
@@ -72,11 +57,11 @@ class Game{
 
     for( var i=0; i<this.dynamicObjects.length; i++) {
       var o = this.dynamicObjects[i];
-      o.render(c, this.arena.origin);
+      o.render(r, this.arena.origin);
       o.animate(dt, 0.0);
 
       // Ask the object to follow arena contour
-      o.ask({ verb: "follow!", argument: this.arena.radiusAt( o.position.angle )-50 })
+      o.ask({ verb: "follow!", argument: this.arena.radiusAt( o.position.angle )-0.05 })
 
       // Ask the object if it wants to attack
       var attack = o.ask({verb: "attack?"});

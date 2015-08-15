@@ -9,6 +9,7 @@
 
 /// <reference path="vector.ts" />
 /// <reference path="polar_coordinate.ts" />
+/// <reference path="renderer.ts" />
 
 // Interface for a message
 //
@@ -25,7 +26,7 @@ interface DynamicObject{
 
   // Animate and render
   animate(dt: number, origin_speed: number);
-  render(context: any, origin: Vector);
+  render(renderer: Renderer, origin: Vector);
 
   // Ask politely
   ask(sentence: DynamicMessage): DynamicMessage;

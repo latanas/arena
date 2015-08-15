@@ -10,6 +10,7 @@
 /// <reference path="vector.ts" />
 /// <reference path="polar_coordinate.ts" />
 /// <reference path="dynamic_object.ts" />
+/// <reference path="renderer.ts" />
 
 // Base class for a spaceship
 //
@@ -17,7 +18,7 @@ class Spaceship implements DynamicObject{
   public speed:    number;
   public position: PolarCoordinateAreal;
 
-  protected moveDirection: number;
+  protected direction: number;
 
   protected projectileSpeed: number;
   protected projectileAreal: number;
@@ -25,24 +26,21 @@ class Spaceship implements DynamicObject{
 
   constructor(p: PolarCoordinate) {
     this.position = new PolarCoordinateAreal(p.angle, p.radius, 1.0);
-    this.speed = Math.PI*0.001;
-    this.projectileSpeed = -1.0;
+    this.speed = 0.001;
+    this.projectileSpeed = 0.001;
     this.projectileAreal = 1.0;
 
-    this.moveDirection = 0;
+    this.direction = +0;
     this.projectile = null;
   }
 
   public animate(dt: number, origin_speed: number) {
-    this.position.angle += dt * (this.speed + origin_speed) * this.moveDirection;
+    this.position.angle += dt * (this.speed + origin_speed) * this.direction;
   }
 
-  public render(context: any, origin: Vector) {
+  public render(renderer: Renderer, origin: Vector) {
     var v = Vector.plus( this.position.vector(), origin );
-
-    context.beginPath();
-    context.arc( v.x, v.y, 20, 0, 2*Math.PI );
-    context.stroke();
+    renderer.spaceship( v, 20, this.position.angle );
   }
 
   // Ask the spaceship
@@ -71,7 +69,7 @@ class Spaceship implements DynamicObject{
     var p = this.position.copy();
 
     this.projectile = new Projectile(
-        this.projectileSpeed,
+        -1.0*this.projectileSpeed,
         new PolarCoordinateAreal(p.angle, p.radius, this.projectileAreal)
     );
   }

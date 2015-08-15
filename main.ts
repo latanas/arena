@@ -7,7 +7,8 @@
   http://www.atanaslaskov.com/arena/
 */
 
+/// <reference path="renderer.ts" />
 /// <reference path="game.ts" />
 
-var g = new Game();
+var g = new Game( new CanvasRenderer() );
 g.animationFrame();
