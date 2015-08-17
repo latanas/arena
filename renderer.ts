@@ -32,6 +32,7 @@ class CanvasRenderer implements Renderer{
   private origin:  Vector;
 
   private numberPoints: number;
+  private template: Vector[];
 
   constructor() {
     this.width  = window.innerWidth;
@@ -54,6 +55,16 @@ class CanvasRenderer implements Renderer{
       this.scale = Math.min(this.width, this.height);
       this.origin = new Vector(this.width/2.0, this.height/2.0);
     });
+
+    this.template = [
+      new Vector( -0.5, +0.5 ),
+      new Vector( -0.5, +0.0 ),
+      new Vector( +0.0, -0.5 ),
+      new Vector( +0.5, +0.0 ),
+      new Vector( +0.5, +0.5 ),
+      new Vector( +0.0, +0.0 ),
+      new Vector( -0.5, +0.5 ),
+    ];
   }
 
   private rgba(c: Color) {
@@ -96,6 +107,14 @@ class CanvasRenderer implements Renderer{
   }
 
   public spaceship(position: Vector, size: number, angle: number) {
-    this.marker(position, size);
+    var p: Vector[] = [];
+    var sin = Math.sin(angle), cos = Math.cos(angle);
+
+    for(var i=0; i<this.template.length; i++) {
+      var x = this.template[i].x, y = this.template[i].y;
+      var v = new Vector( x*cos-y*sin, x*sin+y*cos );
+      p.push( Vector.plus(position, Vector.scale(v,size)) );
+    }
+    this.polyline(p);
   }
 }

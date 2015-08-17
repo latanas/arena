@@ -10,6 +10,7 @@
 /// <reference path="vector.ts" />
 /// <reference path="polar_coordinate.ts" />
 /// <reference path="dynamic_object.ts" />
+/// <reference path="color.ts" />
 /// <reference path="renderer.ts" />
 
 // Projectile released by a spaceship
@@ -20,12 +21,14 @@ class Projectile implements DynamicObject {
 
   private positionInitial: PolarCoordinate;
   private ttl: number;
+  private color: Color;
 
   constructor(s: number, p: PolarCoordinateAreal) {
     this.speed = s;
     this.position = p;
     this.positionInitial = p.copy();
     this.ttl = 4000.0;
+    this.color = new Color(1.0, 0.0, 0.0);
   }
 
   public animate(dt: number) {
@@ -35,6 +38,7 @@ class Projectile implements DynamicObject {
   }
 
   public render(renderer: Renderer, origin: Vector) {
+    renderer.style( this.color, 1 );
     renderer.polyline([
       Vector.plus( this.positionInitial.vector(), origin ),
       Vector.plus( this.position.vector(), origin )

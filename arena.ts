@@ -8,8 +8,9 @@
 */
 
 /// <reference path="vector.ts" />
-/// <reference path="renderer.ts" />
 /// <reference path="polar_coordinate.ts" />
+/// <reference path="color.ts" />
+/// <reference path="renderer.ts" />
 
 // Gameplay arena
 //
@@ -21,6 +22,8 @@ class Arena{
 
   private computedStep:      number;
   private computedRadiuses:  PolarCoordinate[];
+
+  private color: Color;
 
   // Construct the arena
   constructor(o:Vector, r:number) {
@@ -38,6 +41,7 @@ class Arena{
     ]
     this.computedStep = Math.PI*0.01;
     this.compute();
+    this.color = new Color(0, 0, 0);
   }
 
   // Get radius at the given polar coordinate
@@ -89,9 +93,11 @@ class Arena{
       var p = pr[ (i==pr.length)? 0:i ];
       points.push( Vector.plus(this.origin, p.vector()) );
     }
+    renderer.style( this.color, 3 );
     renderer.polyline(points);
 
     // Render the inflection points, for debugging
+    renderer.style( this.color, 1 );
     for( var n=0; n<ip.length; n++ ) {
       renderer.marker( Vector.plus(this.origin, ip[n].vector()), 5 );
     }

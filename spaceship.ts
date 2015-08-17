@@ -10,6 +10,7 @@
 /// <reference path="vector.ts" />
 /// <reference path="polar_coordinate.ts" />
 /// <reference path="dynamic_object.ts" />
+/// <reference path="color.ts" />
 /// <reference path="renderer.ts" />
 
 // Base class for a spaceship
@@ -18,20 +19,32 @@ class Spaceship implements DynamicObject{
   public speed:    number;
   public position: PolarCoordinateAreal;
 
+  public hp: number;
+  public hpMax: number;
+
   protected direction: number;
 
   protected projectileSpeed: number;
   protected projectileAreal: number;
   protected projectile: Projectile;
 
+  protected color: Color;
+  protected colorHp: Color;
+  protected colorBar: Color;
+
   constructor(p: PolarCoordinate) {
-    this.position = new PolarCoordinateAreal(p.angle, p.radius, 1.0);
+    this.position = new PolarCoordinateAreal(p.angle, p.radius, 0.05);
     this.speed = 0.001;
     this.projectileSpeed = 0.001;
-    this.projectileAreal = 1.0;
+    this.projectileAreal = 0.05;
 
     this.direction = +0;
     this.projectile = null;
+
+    this.hpMax = this.hp = 10.0;
+    this.color = new Color(0.0, 0.0, 0.0);
+    this.colorHp = new Color(1.0, 0.0, 0.0);
+    this.colorBar = new Color(0.5, 0.5, 0.5)
   }
 
   public animate(dt: number, origin_speed: number) {
@@ -39,8 +52,23 @@ class Spaceship implements DynamicObject{
   }
 
   public render(renderer: Renderer, origin: Vector) {
-    var v = Vector.plus( this.position.vector(), origin );
-    renderer.spaceship( v, 20, this.position.angle );
+    var v:Vector = this.position.vector()
+    var p:Vector = Vector.plus( v, origin );
+    var hpStatus = (this.hp / this.hpMax)-0.5;
+    var hpPos = this.position.areal*0.6;
+
+    renderer.style( this.color, 1 );
+    renderer.spaceship( p, this.position.areal, this.position.angle - Math.PI*0.5 );
+    renderer.style( this.colorHp, 3 );
+    renderer.polyline([
+      Vector.plus( p, new Vector((-0.5)*hpPos, (+1.0)*hpPos)),
+      Vector.plus( p, new Vector(hpStatus*hpPos, (+1.0)*hpPos))
+    ]);
+    renderer.style( this.colorBar, 3 );
+    renderer.polyline([
+      Vector.plus( p, new Vector(hpStatus*hpPos, (+1.0)*hpPos)),
+      Vector.plus( p, new Vector((+0.5)*hpPos, (+1.0)*hpPos))
+    ]);
   }
 
   // Ask the spaceship

@@ -29,4 +29,8 @@ class Vector{
   static minus(a: Vector, b: Vector): Vector {
     return new Vector( a.x-b.x, a.y-b.y );
   }
+
+  static scale(v: Vector, n: number) {
+    return new Vector( v.x*n, v.y*n );
+  }
 }
