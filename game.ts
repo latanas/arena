@@ -32,15 +32,14 @@ class Game{
 
     this.arena = new Arena( new Vector(0.0, 0.0), 0.5 );
 
-    this.dynamicObjects = [
-      new PlayerSpaceship( new PolarCoordinate(Math.PI/2.0, 0.5-0.05) ),
-      new EnemySpaceship( new PolarCoordinate(-Math.PI/2.0, 0.5-0.05) )
-    ];
+    this.dynamicObjects = [];
+    this.spawnPlayer();
+    this.spawnEnemy();
   }
 
-  // Animation frame
+  // Single action frame of the game
   //
-  animationFrame = () => {
+  actionFrame = () => {
     var t  = window.performance.now();
     var dt = t - this.clock;
     this.clock = t;
@@ -53,10 +52,11 @@ class Game{
     this.arena.animate(dt);
 
     // Dynamic objects
-    var dynamicObjectsRefresh = [];
-
+    //
     for( var i=0; i<this.dynamicObjects.length; i++) {
       var o = this.dynamicObjects[i];
+      if( !o ) continue;
+
       o.render(r, this.arena.origin);
       o.animate(dt, 0.0);
 
@@ -66,21 +66,60 @@ class Game{
       // Ask the object if it wants to attack
       var attack = o.ask({verb: "attack?"});
 
-      // The object says "attack!" so it must give us a Projectile
+      // The object says "attack!", so it must give us a Projectile
       if( attack.verb == "attack!") {
-        dynamicObjectsRefresh.push( <Projectile> attack.argument );
+        this.spawnObject( <Projectile> attack.argument );
       }
 
-      // Ask the object if it wants to be discarded
-      var discard = o.ask({verb: "discard?"});
+      // Ask the object if it collides with another one
+      for( var j=0; j<this.dynamicObjects.length; j++) {
+        var oo = this.dynamicObjects[j];
+        if( (i == j) || !oo ) continue;
+        var collide = o.ask({ verb: "collide?", argument: oo });
 
-      // The object doesn't want to be discarded, put it on the refresh list
-      if( discard.verb != "discard!") {
-        dynamicObjectsRefresh.push( o );
+        if( collide.verb == "collide!" ) {
+          oo.ask({ verb: "damage!", argument: collide.argument });
+        }
+      }
+
+      // If a ship is discarded, we want to spawn a new one
+      if( o.ask({verb: "discard?"}).verb == "discard!" ) {
+        if( o.ask({ verb: "gameover?" }).verb == "gameover!" ) {
+          setTimeout(this.spawnPlayer, 3000);
+        }
+        else if( o.ask({ verb: "is?", argument: "spaceship" }).verb == "is!" ) {
+          setTimeout(this.spawnEnemy, 3000);
+        }
+        this.dynamicObjects[i] = null;
       }
     }
+    window.requestAnimationFrame( this.actionFrame );
+  }
 
-    this.dynamicObjects = dynamicObjectsRefresh;
-    window.requestAnimationFrame( this.animationFrame );
+  // Spawn an object in a free slot
+  private spawnObject(o: DynamicObject) {
+    for( var i=0; i<this.dynamicObjects.length; i++) {
+      if( !this.dynamicObjects[i] ) {
+        this.dynamicObjects[i] = o;
+        return;
+      }
+    }
+    this.dynamicObjects.push(o);
+  }
+
+  // Spawn a new enemy spaceship
+  spawnEnemy = () => {
+    console.log("Respawn spaceship.");
+    this.spawnObject(
+      new EnemySpaceship( new PolarCoordinate( /*Math.random()*Math.PI*0.5 + 1.2*/(-0.5)*Math.PI, 0.45) )
+    );
+  }
+
+  // Spawn a new player spaceship
+  spawnPlayer = () => {
+    console.log("Respawn player.");
+    this.spawnObject(
+      new PlayerSpaceship( new PolarCoordinate(Math.PI*0.5, 0.45) )
+    );
   }
 }

@@ -64,15 +64,15 @@ class Spaceship implements DynamicObject{
       Vector.plus( p, new Vector((-0.5)*hpPos, (+1.0)*hpPos)),
       Vector.plus( p, new Vector(hpStatus*hpPos, (+1.0)*hpPos))
     ]);
-    renderer.style( this.colorBar, 3 );
-    renderer.polyline([
-      Vector.plus( p, new Vector(hpStatus*hpPos, (+1.0)*hpPos)),
-      Vector.plus( p, new Vector((+0.5)*hpPos, (+1.0)*hpPos))
-    ]);
   }
 
   // Ask the spaceship
   public ask(sentence: DynamicMessage): DynamicMessage {
+    // Somebody asked the Spaceship if it's time to get discarded
+    if( sentence.verb == "discard?" && this.hp <= 0 ) {
+      // Yes, time to live has expired.
+      return { verb: "discard!" };
+    }
 
     // Somebody asked the Spaceship to follow to new position, it knows how to do this
     if( sentence.verb == "follow!" ) {
@@ -86,6 +86,17 @@ class Spaceship implements DynamicObject{
       var msg = { verb: "attack!", argument: this.projectile };
       this.projectile = null;
       return msg;
+    }
+
+    // Somebody the Spaceship to take damage
+    if( sentence.verb == "damage!" ) {
+      this.hp = Math.max(0.0,  this.hp-sentence.argument);
+      return { verb: "damage!" };
+    }
+
+    // Somebody asked us if we are a Spaceship
+    if( (sentence.verb == "is?") && (sentence.argument == "spaceship") ) {
+      return { verb: "is!" };
     }
 
     // Otherwise just smile

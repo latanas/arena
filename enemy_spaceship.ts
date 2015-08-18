@@ -12,24 +12,44 @@
 // Enemy spacheship, controled by the computer
 //
 class EnemySpaceship extends Spaceship{
-  private dtDirectionChagne: number;
+  private tDirectionChangeMax: number;
+  private tDirectionChange: number;
+
+  private tAttackMax: number;
+  private tAttack: number;
+  private numberShots: number;
 
   constructor(p: PolarCoordinate) {
     super(p);
 
-    this.speed = this.speed/4.0;
+    this.speed     = this.speed*0.4;
     this.direction = +1;
-    this.dtDirectionChagne = 500.0;
+
+    this.tDirectionChangeMax = 2000.0;
+    this.tAttackMax          = 250.0;
+
+    this.tDirectionChange = this.tDirectionChangeMax*0.5;
+    this.tAttack          = this.tAttackMax*1.0;
+    numberShots           = 0;
   }
 
+  // Animate the enemy ship
   public animate(dt: number, origin_speed: number) {
     super.animate(dt, origin_speed);
-    this.dtDirectionChagne -= dt;
 
-    if( this.dtDirectionChagne <= 0 ) {
-      this.dtDirectionChagne = 1000.0;
+    this.tDirectionChange -= dt;
+    this.tAttack          -= dt;
+
+    if( this.tDirectionChange <= 0 ) {
       this.direction = this.direction * (-1);
+      this.numberShots = 5;
+      this.tDirectionChange = this.tDirectionChangeMax*1.0;
+    }
+
+    if( (this.tAttack <= 0) && this.numberShots ) {
       this.prepareAttack();
+      this.tAttack = this.tAttackMax*1.0;
+      this.numberShots--;
     }
   }
 }

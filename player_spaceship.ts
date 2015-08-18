@@ -26,4 +26,14 @@ class PlayerSpaceship extends Spaceship{
       if( e.keyCode == 39 ) this.direction = 0;
     });
   }
+
+  // Ask the spaceship
+  public ask(sentence: DynamicMessage): DynamicMessage {
+    // Player spaceship overides the normal "destroy" message with "gameover"
+    if( sentence.verb == "gameover?" && this.hp <= 0 ) {
+      return { verb: "gameover!" };
+    }
+    // Otherwise, ask the parent
+    return super.ask(sentence);
+  }
 }

@@ -17,17 +17,30 @@
 //
 class Projectile implements DynamicObject {
   public speed:    number;
-  public position: PolarCoordinateAreal;
 
-  private positionInitial: PolarCoordinate;
-  private ttl: number;
+  public position: PolarCoordinateAreal;      // Current position
+  private positionInitial: PolarCoordinate;   // Initial position, used to draw a "trail"
+
+  private ap: number;               // Attack Points
+
+  private ttl: number;              // Time to Live
+  private ttlGhostMax: number;      // Time to Live as "Ghost" ( Ghost prevents damage to our own ship, and repeated damage after hit )
+  private ttlGhost: number;
+
   private color: Color;
 
   constructor(s: number, p: PolarCoordinateAreal) {
     this.speed = s;
+
     this.position = p;
     this.positionInitial = p.copy();
-    this.ttl = 4000.0;
+
+    this.ap = 1.0;
+
+    this.ttl         = 4000.0;
+    this.ttlGhostMax = 500.0;
+    this.ttlGhost    = 500.0;
+
     this.color = new Color(1.0, 0.0, 0.0);
   }
 
@@ -35,6 +48,7 @@ class Projectile implements DynamicObject {
     this.position.radius += dt * this.speed;
     this.positionInitial.radius += dt * (this.speed * 0.9);
     this.ttl -= dt;
+    this.ttlGhost -= dt;
   }
 
   public render(renderer: Renderer, origin: Vector) {
@@ -52,7 +66,25 @@ class Projectile implements DynamicObject {
       return { verb: "discard!" };
     }
 
+    // Somebody asked the Projectile if it collides with an object
+    if( (sentence.verb == "collide?") && (this.ttlGhost <= 0) ) {
+      var o:DynamicObject = <DynamicObject> sentence.argument;
+
+      // We only care about collisions with spaceships
+      if( o.ask({ verb:"is?", argument:"spaceship" }).verb == "is!" ) {
+        if( this.isCollision(o) ) {
+          this.ttlGhost = this.ttlGhostMax;
+          return { verb: "collide!", argument: this.ap }
+        }
+      }
+    }
+
     // Otherwise just smile
     return { verb: "smile!" };
+  }
+
+  private isCollision(collisionTarget: DynamicObject) {
+    var v:Vector = Vector.minus( collisionTarget.position.vector(), this.position.vector() );
+    return (v.distance() <= collisionTarget.position.areal);
   }
 }

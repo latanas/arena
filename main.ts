@@ -11,4 +11,4 @@
 /// <reference path="game.ts" />
 
 var g = new Game( new CanvasRenderer() );
-g.animationFrame();
+g.actionFrame();

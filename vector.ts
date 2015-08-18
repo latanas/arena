@@ -22,6 +22,10 @@ class Vector{
     return new Vector(this.x, this.y);
   }
 
+  public distance(): number {
+    return Math.sqrt( this.x*this.x + this.y*this.y );
+  }
+
   static plus(a: Vector, b: Vector): Vector {
     return new Vector( a.x+b.x, a.y+b.y );
   }
