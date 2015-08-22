@@ -10,7 +10,7 @@
 /// <reference path="renderer.ts" />
 /// <reference path="game.ts" />
 
-window.onload = function() {
+window.addEventListener("load", () => {
   var g = new Game( new CanvasRenderer() );
   g.actionFrame();
-}
+});

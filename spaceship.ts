@@ -34,8 +34,8 @@ class Spaceship implements DynamicObject{
 
   constructor(p: PolarCoordinate) {
     this.position = new PolarCoordinateAreal(p.angle, p.radius, 0.05);
-    this.speed = 0.001;
-    this.projectileSpeed = 0.001;
+    this.speed = 1.0;
+    this.projectileSpeed = 1.0;
     this.projectileAreal = 0.05;
 
     this.direction = +0;

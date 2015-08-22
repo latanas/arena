@@ -37,9 +37,9 @@ class Projectile implements DynamicObject {
 
     this.ap = 1.0;
 
-    this.ttl         = 4000.0;
-    this.ttlGhostMax = 500.0;
-    this.ttlGhost    = 500.0;
+    this.ttl         = 1.0;
+    this.ttlGhostMax = 0.5;
+    this.ttlGhost    = 0.5;
 
     this.color = new Color(1.0, 0.0, 0.0);
   }

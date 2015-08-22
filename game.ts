@@ -10,6 +10,7 @@
 /// <reference path="vector.ts" />
 /// <reference path="polar_coordinate.ts" />
 /// <reference path="renderer.ts" />
+/// <reference path="clock.ts" />
 
 /// <reference path="arena.ts" />
 /// <reference path="dynamic_object.ts" />
@@ -21,7 +22,8 @@
 //
 class Game{
   private renderer: Renderer;
-  private clock: number;
+
+  private clock: Clock;
   private isPaused: boolean;
 
   private arena: Arena;
@@ -29,7 +31,8 @@ class Game{
 
   constructor(r: Renderer) {
     this.renderer = r;
-    this.clock    = window.performance.now();
+
+    this.clock    = new Clock();
     this.isPaused = false;
 
     this.arena = new Arena( new Vector(0.0, 0.0), 0.5 );
@@ -42,13 +45,10 @@ class Game{
   // Single action frame of the game
   //
   actionFrame = () => {
-    var t  = window.performance.now();
-    var dt = t - this.clock;
-    this.clock = t;
+    var dt = this.clock.tick();
 
     this.render();
     if( !this.isPaused ) this.animate(dt);
-
     window.requestAnimationFrame( this.actionFrame );
   }
 

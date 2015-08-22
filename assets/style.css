@@ -1,7 +1,7 @@
 html, body, canvas{
   margin:  0px;
   padding: 0px;
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: Helvetica, sans-serif;
 }
 
 canvas{
@@ -13,14 +13,15 @@ canvas{
 .help_window{
   z-index:  999;
   position: fixed;
+
   left: 50px;
   top:  50px;
 }
 
 .game_over{
   z-index:  999;
-
   position: fixed;
+
   top:  0px;
   left: 0px;
 

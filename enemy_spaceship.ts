@@ -22,11 +22,11 @@ class EnemySpaceship extends Spaceship{
   constructor(p: PolarCoordinate) {
     super(p);
 
-    this.speed     = this.speed*0.4;
+    this.speed     = this.speed*0.6;
     this.direction = +1;
 
-    this.tDirectionChangeMax = 2000.0;
-    this.tAttackMax          = 250.0;
+    this.tDirectionChangeMax = 2.0;
+    this.tAttackMax          = 0.25;
 
     this.tDirectionChange = this.tDirectionChangeMax*0.5;
     this.tAttack          = this.tAttackMax*1.0;
