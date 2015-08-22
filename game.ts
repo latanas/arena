@@ -17,18 +17,20 @@
 /// <reference path="enemy_spaceship.ts" />
 /// <reference path="projectile.ts" />
 
-// Game initializes and manages the dynamic objects
+// Game initializes and manages dynamic objects
 //
 class Game{
   private renderer: Renderer;
   private clock: number;
+  private isPaused: boolean;
 
   private arena: Arena;
   private dynamicObjects: DynamicObject[];
 
   constructor(r: Renderer) {
     this.renderer = r;
-    this.clock = window.performance.now();
+    this.clock    = window.performance.now();
+    this.isPaused = false;
 
     this.arena = new Arena( new Vector(0.0, 0.0), 0.5 );
 
@@ -44,11 +46,31 @@ class Game{
     var dt = t - this.clock;
     this.clock = t;
 
-    var r = this.renderer;
-    r.background();
+    this.render();
+    if( !this.isPaused ) this.animate(dt);
 
-    // Game arena
+    window.requestAnimationFrame( this.actionFrame );
+  }
+
+  // Make a picture
+  //
+  private render() {
+    var r = this.renderer;
+
+    r.background();
     this.arena.render(r);
+
+    for( var i=0; i<this.dynamicObjects.length; i++) {
+      var o = this.dynamicObjects[i];
+
+      if( !o ) continue;
+      o.render(r, this.arena.origin);
+    }
+  }
+
+  // Make things move
+  //
+  private animate(dt: number) {
     this.arena.animate(dt);
 
     // Dynamic objects
@@ -56,8 +78,6 @@ class Game{
     for( var i=0; i<this.dynamicObjects.length; i++) {
       var o = this.dynamicObjects[i];
       if( !o ) continue;
-
-      o.render(r, this.arena.origin);
       o.animate(dt, 0.0);
 
       // Ask the object to follow arena contour
@@ -85,7 +105,9 @@ class Game{
       // If a ship is discarded, we want to spawn a new one
       if( o.ask({verb: "discard?"}).verb == "discard!" ) {
         if( o.ask({ verb: "gameover?" }).verb == "gameover!" ) {
-          setTimeout(this.spawnPlayer, 3000);
+          this.isPaused = true;
+          setTimeout(this.spawnPlayer, 4000);
+          setTimeout(this.spawnEnemy, 6000);
         }
         else if( o.ask({ verb: "is?", argument: "spaceship" }).verb == "is!" ) {
           setTimeout(this.spawnEnemy, 3000);
@@ -93,7 +115,6 @@ class Game{
         this.dynamicObjects[i] = null;
       }
     }
-    window.requestAnimationFrame( this.actionFrame );
   }
 
   // Spawn an object in a free slot
@@ -118,6 +139,10 @@ class Game{
   // Spawn a new player spaceship
   spawnPlayer = () => {
     console.log("Respawn player.");
+
+    this.isPaused = false;
+    this.dynamicObjects.length = 0;
+
     this.spawnObject(
       new PlayerSpaceship( new PolarCoordinate(Math.PI*0.5, 0.45) )
     );

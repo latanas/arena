@@ -30,7 +30,7 @@ class EnemySpaceship extends Spaceship{
 
     this.tDirectionChange = this.tDirectionChangeMax*0.5;
     this.tAttack          = this.tAttackMax*1.0;
-    numberShots           = 0;
+    this.numberShots      = 0;
   }
 
   // Animate the enemy ship

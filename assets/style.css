@@ -1,6 +1,7 @@
-html body canvas{
+html, body, canvas{
   margin:  0px;
   padding: 0px;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 canvas{
@@ -14,4 +15,29 @@ canvas{
   position: fixed;
   left: 50px;
   top:  50px;
+}
+
+.game_over{
+  z-index:  999;
+
+  position: fixed;
+  top:  0px;
+  left: 0px;
+
+  width: 100%;
+  height: 100%;
+
+  margin:  0px;
+  padding: 0px;
+
+  background-color: white;
+  opacity:          0.0;
+  transition:       opacity 1.5s ease;
+
+  text-align: center;
+}
+
+.game_over p{
+  display:    inline-block;
+  margin-top: 15%;
 }

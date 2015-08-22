@@ -70,6 +70,7 @@ class CanvasRenderer implements Renderer{
   private rgba(c: Color) {
     var r=c.r*255.0, g=c.g*255.0, b=c.b*255.0, a=c.a;
     return "RGBA("+ r +","+ g +","+ b +","+ a +")";
+
   }
 
   public style(color: Color, thickness: number) {
