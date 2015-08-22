@@ -17,6 +17,7 @@
 /// <reference path="player_spaceship.ts" />
 /// <reference path="enemy_spaceship.ts" />
 /// <reference path="projectile.ts" />
+/// <reference path="badge.ts" />
 
 // Game initializes and manages dynamic objects
 //
@@ -35,7 +36,7 @@ class Game{
     this.clock    = new Clock();
     this.isPaused = false;
 
-    this.arena = new Arena( new Vector(0.0, 0.0), 0.5 );
+    this.arena = new Arena( new Vector(0.0, 0.0), 0.45 );
 
     this.dynamicObjects = [];
     this.spawnPlayer();
@@ -110,6 +111,7 @@ class Game{
           setTimeout(this.spawnEnemy, 6000);
         }
         else if( o.ask({ verb: "is?", argument: "spaceship" }).verb == "is!" ) {
+          this.spawnObject( new Badge() );
           setTimeout(this.spawnEnemy, 3000);
         }
         this.dynamicObjects[i] = null;
@@ -118,6 +120,7 @@ class Game{
   }
 
   // Spawn an object in a free slot
+  //
   private spawnObject(o: DynamicObject) {
     for( var i=0; i<this.dynamicObjects.length; i++) {
       if( !this.dynamicObjects[i] ) {
@@ -129,14 +132,16 @@ class Game{
   }
 
   // Spawn a new enemy spaceship
+  //
   spawnEnemy = () => {
     console.log("Respawn spaceship.");
     this.spawnObject(
-      new EnemySpaceship( new PolarCoordinate( /*Math.random()*Math.PI*0.5 + 1.2*/(-0.5)*Math.PI, 0.45) )
+      new EnemySpaceship( new PolarCoordinate( /*Math.random()*Math.PI*0.5 + 1.2*/(-0.5)*Math.PI, 0.4) )
     );
   }
 
   // Spawn a new player spaceship
+  //
   spawnPlayer = () => {
     console.log("Respawn player.");
 
@@ -144,7 +149,7 @@ class Game{
     this.dynamicObjects.length = 0;
 
     this.spawnObject(
-      new PlayerSpaceship( new PolarCoordinate(Math.PI*0.5, 0.45) )
+      new PlayerSpaceship( new PolarCoordinate(Math.PI*0.5, 0.4) )
     );
   }
 }

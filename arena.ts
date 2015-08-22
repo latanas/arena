@@ -26,6 +26,7 @@ class Arena{
   private color: Color;
 
   // Construct the arena
+  //
   constructor(o:Vector, r:number) {
     this.origin = o;
     this.radius = r;
@@ -45,6 +46,7 @@ class Arena{
   }
 
   // Get radius at the given polar coordinate
+  //
   public radiusAt(angle: number) {
     // Reduce angle
     angle = angle % (Math.PI * 2.0);
@@ -71,6 +73,7 @@ class Arena{
   }
 
   // Compute the radius at incremental steps
+  //
   public compute() {
     this.computedRadiuses = [];
     for( var a=0; a<=Math.PI*2.0-this.computedStep; a+=this.computedStep ) {
@@ -79,10 +82,12 @@ class Arena{
   }
 
   // Animate the arena
+  //
   public animate(dt: number) {
   }
 
   // Render the arena
+  //
   public render(renderer: Renderer) {
     var pr = this.computedRadiuses;
     var ip = this.inflectionPoints;

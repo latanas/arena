@@ -58,7 +58,7 @@ class Spaceship implements DynamicObject{
     var hpPos = this.position.areal*0.6;
 
     renderer.style( this.color, 1 );
-    renderer.spaceship( p, this.position.areal, this.position.angle - Math.PI*0.5 );
+    renderer.spaceship( p, this.position.angle - Math.PI*0.5, this.position.areal );
     renderer.style( this.colorHp, 3 );
     renderer.polyline([
       Vector.plus( p, new Vector((-0.5)*hpPos, (+1.0)*hpPos)),

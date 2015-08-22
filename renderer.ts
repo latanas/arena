@@ -126,7 +126,7 @@ class CanvasRenderer implements Renderer{
     this.context.stroke();
   }
 
-  public spaceship(position: Vector, size: number, angle: number) {
+  public spaceship(position: Vector, angle: number, size: number) {
     var p: Vector[] = [];
     var sin = Math.sin(angle), cos = Math.cos(angle);
 
