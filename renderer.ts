@@ -10,10 +10,20 @@
 /// <reference path="vector.ts" />
 /// <reference path="color.ts" />
 
+// Gradient between two colors
+//
+interface Gradient{
+  start: Vector;
+  startColor: Color;
+
+  end: Vector;
+  endColor: Color;
+}
+
 // Renderer interface
 //
 interface Renderer{
-  style(color: Color, thickness: number);
+  style(color: Color | Gradient, thickness: number);
   background();
 
   polyline(points: Vector[]);
@@ -67,14 +77,23 @@ class CanvasRenderer implements Renderer{
     ];
   }
 
-  private rgba(c: Color) {
-    var r=c.r*255.0, g=c.g*255.0, b=c.b*255.0, a=c.a;
-    return "RGBA("+ r +","+ g +","+ b +","+ a +")";
+  public style(color: Color | Gradient, thickness: number) {
+    if( color instanceof Color ) {
+      this.context.strokeStyle = color.rgba_string();
+    }
+    else {
+      var g: Gradient = <Gradient> color;
+      var s = this.scale;
+      var o = this.origin;
 
-  }
-
-  public style(color: Color, thickness: number) {
-    this.context.strokeStyle = this.rgba(color);
+      var linearGradient = this.context.createLinearGradient(
+        Math.round(g.start.x*s + o.x), Math.round(g.start.y*s + o.y),
+        Math.round(g.end.x*s + o.x), Math.round(g.end.y*s + o.y)
+      );
+      linearGradient.addColorStop(0, g.startColor.rgba_string());
+      linearGradient.addColorStop(1, g.endColor.rgba_string());
+      this.context.strokeStyle = linearGradient;
+    }
     this.context.lineWidth = thickness;
   }
 

@@ -21,4 +21,9 @@ class Color{
     this.b = b;
     this.a = a;
   }
+
+  public rgba_string() {
+    var r=Math.round(this.r*255.0), g=Math.round(this.g*255.0), b=Math.round(this.b*255.0), a=this.a;
+    return "RGBA("+ r +","+ g +","+ b +","+ a +")";
+  }
 }

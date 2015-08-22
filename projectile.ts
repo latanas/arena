@@ -37,7 +37,7 @@ class Projectile implements DynamicObject {
 
     this.ap = 1.0;
 
-    this.ttl         = 1.0;
+    this.ttl         = 2.0;
     this.ttlGhostMax = 0.5;
     this.ttlGhost    = 0.5;
 
@@ -46,17 +46,24 @@ class Projectile implements DynamicObject {
 
   public animate(dt: number) {
     this.position.radius += dt * this.speed;
-    this.positionInitial.radius += dt * (this.speed * 0.9);
+    this.positionInitial.radius += dt * (this.speed * 0.8);
     this.ttl -= dt;
     this.ttlGhost -= dt;
   }
 
   public render(renderer: Renderer, origin: Vector) {
-    renderer.style( this.color, 1 );
-    renderer.polyline([
-      Vector.plus( this.positionInitial.vector(), origin ),
-      Vector.plus( this.position.vector(), origin )
-    ]);
+    var pt = [
+      Vector.plus( this.position.vector(), origin ),
+      Vector.plus( this.positionInitial.vector(), origin )
+    ];
+
+    var gradient = {
+      start: pt[0], startColor: this.color,
+      end: pt[1], endColor: new Color(this.color.r, this.color.g, this.color.b, 0.0),
+    };
+
+    renderer.style(gradient, 5 );
+    renderer.polyline(pt);
   }
 
   public ask(sentence: DynamicMessage): DynamicMessage {
