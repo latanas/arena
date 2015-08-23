@@ -22,8 +22,23 @@ class Color{
     this.a = a;
   }
 
-  public rgba_string() {
-    var r=Math.round(this.r*255.0), g=Math.round(this.g*255.0), b=Math.round(this.b*255.0), a=this.a;
-    return "RGBA("+ r +","+ g +","+ b +","+ a +")";
+  // Make CSS color string
+  public css() {
+    var r =this.componentRGB(this.r);
+    var g =this.componentRGB(this.g);
+    var b =this.componentRGB(this.b);
+    var a =this.componentAlpha(this.a);
+
+    return "rgba("+ r +","+ g +","+ b +","+ a +")";
+  }
+
+  // RGB components are integers mapped to the range [0, 255]
+  private componentRGB(n: number) {
+    return Math.round( Math.max(0.0, Math.min(1.0, n)) * 255.0 );
+  }
+
+  // Alpha component is mapped to the range [0.0, 1.0]
+  private componentAlpha(n: number) {
+    return Math.max(0.0, Math.min(1.0, n));
   }
 }

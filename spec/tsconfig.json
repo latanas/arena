@@ -6,6 +6,7 @@
   "files": [
     "../typings/jasmine/jasmine.d.ts",
     "support/utils.ts",
-    "vector_spec.ts"
+    "vector_spec.ts",
+    "color_spec.ts"
   ]
 }

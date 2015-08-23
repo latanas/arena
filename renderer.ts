@@ -79,7 +79,7 @@ class CanvasRenderer implements Renderer{
 
   public style(color: Color | Gradient, thickness: number) {
     if( color instanceof Color ) {
-      this.context.strokeStyle = color.rgba_string();
+      this.context.strokeStyle = color.css();
     }
     else {
       var g: Gradient = <Gradient> color;
@@ -90,8 +90,8 @@ class CanvasRenderer implements Renderer{
         Math.round(g.start.x*s + o.x), Math.round(g.start.y*s + o.y),
         Math.round(g.end.x*s + o.x), Math.round(g.end.y*s + o.y)
       );
-      linearGradient.addColorStop(0, g.startColor.rgba_string());
-      linearGradient.addColorStop(1, g.endColor.rgba_string());
+      linearGradient.addColorStop(0, g.startColor.css());
+      linearGradient.addColorStop(1, g.endColor.css());
       this.context.strokeStyle = linearGradient;
     }
     this.context.lineWidth = thickness;
