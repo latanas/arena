@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "out": "build/main.js",
+    "sourceMap": true,
+    "listFiles": true
+  },
+  "files": [ "main.ts" ]
+}

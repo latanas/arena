@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "out": "spec/build/spec.js",
+    "listFiles": true
+  },
+  "files": [
+    "vector_spec.ts"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "arena_game",
+  "version": "0.1.0",
+  "description": "Action/tactics game in TypeScript.",
+  "homepage": "http://www.laskov.co.uk/arena/",
+  "author": "Atanas Laskov <latanas@gmail.com>",
+  "license": "BSD-2-Clause",
+
+  "dependencies": {
+    "typescript": ">=1.5.0",
+    "tsd": ">=0.6.0",
+    "jasmine": ">=2.3.0"
+  }
+}

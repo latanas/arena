@@ -1,8 +1,22 @@
-Arena
-=====
+Arena Game
+==========
 
-### Build:
+#### Install dependencies:
+```
+sudo npm install -g
+tsd install jasmine
+```
 
-npm install -g typescript
+#### Build:
+```
+tsc -p .
+```
 
-tsc -out build/main.js --sourcemap main.ts
+#### Unit test:
+```
+tsc -p spec/
+jasmine
+```
+
+#### Play:
+http://www.atanaslaskov.com/arena/
