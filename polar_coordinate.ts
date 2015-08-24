@@ -41,4 +41,8 @@ class PolarCoordinateAreal extends PolarCoordinate{
     super(angle,radius);
     this.areal = areal;
   }
+
+  public copy(): PolarCoordinateAreal {
+    return new PolarCoordinateAreal(this.angle, this.radius, this.areal);
+  }
 }

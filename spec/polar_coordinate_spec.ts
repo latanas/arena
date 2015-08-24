@@ -70,4 +70,30 @@ describe("PolarCoordinate", () => {
     expect( limitPrecision(v.x) ).toEqual( 1.0 );
     expect( Math.abs(limitPrecision(v.y)) ).toEqual( 0.0 );
   });
+
+  it("should construct a new polar coordinate with area of effect", () => {
+    var c:PolarCoordinateAreal = new PolarCoordinateAreal( Math.PI, 0.1, 0.2 );
+
+    expect(c.angle).toEqual( Math.PI );
+    expect(c.radius).toEqual( 0.1 );
+    expect(c.areal).toEqual( 0.2 );
+  });
+
+  it("should be able to convert areal", () => {
+    var ca:PolarCoordinateAreal = new PolarCoordinateAreal( Math.PI, 0.1, 0.2 );
+    var c:PolarCoordinate = <PolarCoordinate> ca;
+
+    expect(c.angle).toEqual( Math.PI );
+    expect(c.radius).toEqual( 0.1 );
+  });
+
+  it("should make a copy areal", () => {
+    var c1:PolarCoordinateAreal = new PolarCoordinateAreal( Math.PI, 0.1, 0.2 );
+    var c2:PolarCoordinateAreal = c1.copy();
+
+    expect(c2).not.toBe(c1); // (c2 should be a new instance)
+    expect(c2.angle).toEqual( Math.PI );
+    expect(c2.radius).toEqual( 0.1 )
+    expect(c2.areal).toEqual( 0.2 );
+  });
 });
