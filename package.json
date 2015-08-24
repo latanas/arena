@@ -1,7 +1,8 @@
 {
   "name": "arena_game",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Action/tactics game in TypeScript.",
+  "repository": "https://github.com/latanas/arena.git",
   "homepage": "http://www.laskov.co.uk/arena/",
   "author": "Atanas Laskov <latanas@gmail.com>",
   "license": "BSD-2-Clause",

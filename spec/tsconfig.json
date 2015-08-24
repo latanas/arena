@@ -6,7 +6,8 @@
   "files": [
     "../typings/jasmine/jasmine.d.ts",
     "support/utils.ts",
+    "color_spec.ts",
     "vector_spec.ts",
-    "color_spec.ts"
+    "polar_coordinate_spec.ts"
   ]
 }

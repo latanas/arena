@@ -3,12 +3,13 @@ Arena Game
 
 #### Install dependencies:
 ```
-sudo npm install -g
+npm install
 tsd install jasmine
 ```
 
 #### Build:
 ```
+source ./arena.sh
 tsc -p .
 ```
 
