@@ -4,7 +4,6 @@ Arena Game
 #### Install dependencies:
 ```
 npm install
-tsd install jasmine
 ```
 
 #### Build:
