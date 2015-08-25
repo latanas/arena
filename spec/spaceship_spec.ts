@@ -80,6 +80,7 @@ describe("Spaceship", () => {
   it("should respond to 'is?' communication", () => {
     var s:Spaceship = new Spaceship( new PolarCoordinate() );
     expect( s.ask({verb: "is?", argument: "spaceship"}) ).toEqual({verb: "is!"});
+    expect( s.ask({verb: "is?", argument: "projectile"}) ).toEqual({verb: "smile!"});
     expect( s.ask({verb: "is?", argument: "monster"}) ).toEqual({verb: "smile!"});
   });
 });

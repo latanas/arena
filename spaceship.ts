@@ -25,8 +25,6 @@ class Spaceship implements DynamicObject{
 
   public direction: number;
 
-  protected projectileSpeed: number;
-  protected projectileAreal: number;
   protected projectile: Projectile;
 
   protected color: Color;
@@ -36,8 +34,6 @@ class Spaceship implements DynamicObject{
   constructor(p: PolarCoordinate) {
     this.position = new PolarCoordinateAreal(p.angle, p.radius, 0.05);
     this.speed = 1.0;
-    this.projectileSpeed = 1.0;
-    this.projectileAreal = 0.05;
 
     this.direction = +0;
     this.projectile = null;
@@ -109,8 +105,7 @@ class Spaceship implements DynamicObject{
     var p = this.position.copy();
 
     this.projectile = new Projectile(
-        -1.0*this.projectileSpeed,
-        new PolarCoordinateAreal(p.angle, p.radius, this.projectileAreal)
+        new PolarCoordinate(p.angle, p.radius)
     );
   }
 }

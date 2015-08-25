@@ -21,7 +21,7 @@ class Projectile implements DynamicObject {
   public position: PolarCoordinateAreal;      // Current position
   private positionInitial: PolarCoordinate;   // Initial position, used to draw a "trail"
 
-  private ap: number;               // Attack Points
+  public ap: number;               // Attack Points
 
   private ttl: number;              // Time to Live
   private ttlGhostMax: number;      // Time to Live as "Ghost" ( Ghost prevents damage to our own ship, and repeated damage after hit )
@@ -29,10 +29,9 @@ class Projectile implements DynamicObject {
 
   private color: Color;
 
-  constructor(s: number, p: PolarCoordinateAreal) {
-    this.speed = s;
-
-    this.position = p;
+  constructor(p: PolarCoordinate) {
+    this.speed = -1.0;
+    this.position = new PolarCoordinateAreal(p.angle, p.radius, 0.05);
     this.positionInitial = p.copy();
 
     this.ap = 1.0;
@@ -44,7 +43,7 @@ class Projectile implements DynamicObject {
     this.color = new Color(1.0, 0.0, 0.0);
   }
 
-  public animate(dt: number) {
+  public animate(dt: number, origin_speed: number) {
     this.position.radius += dt * this.speed;
     this.positionInitial.radius += dt * (this.speed * 0.8);
     this.ttl -= dt;
@@ -90,8 +89,8 @@ class Projectile implements DynamicObject {
     return { verb: "smile!" };
   }
 
-  private isCollision(collisionTarget: DynamicObject) {
+  public isCollision(collisionTarget: DynamicObject) {
     var v:Vector = Vector.minus( collisionTarget.position.vector(), this.position.vector() );
-    return (v.distance() <= collisionTarget.position.areal);
+    return (v.distance() <= this.position.areal + collisionTarget.position.areal);
   }
 }
