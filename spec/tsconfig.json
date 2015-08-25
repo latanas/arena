@@ -8,6 +8,7 @@
     "support/utils.ts",
     "color_spec.ts",
     "vector_spec.ts",
-    "polar_coordinate_spec.ts"
+    "polar_coordinate_spec.ts",
+    "spaceship_spec.ts"
   ]
 }

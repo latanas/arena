@@ -12,6 +12,7 @@
 /// <reference path="dynamic_object.ts" />
 /// <reference path="color.ts" />
 /// <reference path="renderer.ts" />
+/// <reference path="projectile.ts" />
 
 // Base class for a spaceship
 //
@@ -22,7 +23,7 @@ class Spaceship implements DynamicObject{
   public hp: number;
   public hpMax: number;
 
-  protected direction: number;
+  public direction: number;
 
   protected projectileSpeed: number;
   protected projectileAreal: number;
@@ -104,7 +105,7 @@ class Spaceship implements DynamicObject{
   }
 
   // Prepare for attach
-  protected prepareAttack(){
+  public prepareAttack(){
     var p = this.position.copy();
 
     this.projectile = new Projectile(
