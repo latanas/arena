@@ -82,7 +82,7 @@ class Game{
       o.animate(dt, 0.0);
 
       // Ask the object to follow arena contour
-      o.ask({ verb: "follow!", argument: this.arena.radiusAt( o.position.angle )-0.05 })
+      o.ask({ verb: "follow!", argument: this.arena.radiusAt( o.position.angle ) })
 
       // Ask the object if it wants to attack
       var attack = o.ask({verb: "attack?"});

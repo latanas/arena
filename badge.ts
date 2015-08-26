@@ -29,14 +29,13 @@ class Badge implements DynamicObject {
     this.accel = 0.0;
     this.accelMax = 2.0 * Math.PI;
 
-    this.position = new PolarCoordinateAreal(Math.PI*0.5 + Math.random()*0.01, 0.0, Math.PI*0.05);
+    this.position = new PolarCoordinateAreal(Math.PI*0.5 + Math.random()*0.01, 0.0, Math.PI*0.025);
     this.color = new Color(0.9, 0.8, 0.0);
   }
 
-  public animate(dt: number) {
-    this.position.angle += dt * this.speed;
-
-    this.speed = this.accel * dt;
+  public animate(dt: number, origin_speed: number) {
+    this.position.angle += dt * (this.speed + origin_speed);
+    this.speed = dt * this.accel;
     this.accel = 0.0;
   }
 
@@ -48,7 +47,7 @@ class Badge implements DynamicObject {
   public ask(sentence: DynamicMessage): DynamicMessage {
     // Somebody asked the Badge to follow to new position, it knows how to do this
     if( sentence.verb == "follow!" ) {
-      this.position.radius = <number> sentence.argument + 0.1;
+      this.position.radius = <number> sentence.argument + 0.05;
       return { verb: "follow!" };
     }
 
@@ -65,12 +64,14 @@ class Badge implements DynamicObject {
       if( o.ask({ verb:"is?", argument:"badge" }).verb == "is!" ) {
         // Apply repulsion force between the Badges, giving us some nice dynamic spacing
         //
+        var distanceMax = this.position.areal + o.position.areal;
         var distance  = Math.abs(this.position.angle-o.position.angle);
         var direction = this.position.angle-o.position.angle >0? +1.0:-1.0;
-        var accel     = this.accelMax * direction * ( 1.0 - distance/this.position.areal );
+        var accel     = this.accelMax * direction * ( 1.0 - distance/distanceMax );
 
-        if( distance <= this.position.areal ) {
+        if( distance <= distanceMax ) {
           this.accel += accel;
+          return { verb: "collide!", argument: accel}
         }
       }
     }

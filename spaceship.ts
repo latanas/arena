@@ -73,7 +73,7 @@ class Spaceship implements DynamicObject{
 
     // Somebody asked the Spaceship to follow to new position, it knows how to do this
     if( sentence.verb == "follow!" ) {
-      this.position.radius = <number> sentence.argument;
+      this.position.radius = <number> sentence.argument - 0.05;
       return { verb: "follow!" };
     }
 

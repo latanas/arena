@@ -55,7 +55,7 @@ describe("Spaceship", () => {
   it("should respond to 'follow!' communication", () => {
     var s:Spaceship = new Spaceship( new PolarCoordinate() );
     expect( s.ask({verb: "follow!", argument: 10}) ).toEqual({verb: "follow!"});
-    expect( s.position.radius ).toEqual(10);
+    expect( s.position.radius ).toEqual(9.95);
   });
 
   it("should respond to 'attack!' communication", () => {
@@ -81,6 +81,6 @@ describe("Spaceship", () => {
     var s:Spaceship = new Spaceship( new PolarCoordinate() );
     expect( s.ask({verb: "is?", argument: "spaceship"}) ).toEqual({verb: "is!"});
     expect( s.ask({verb: "is?", argument: "projectile"}) ).toEqual({verb: "smile!"});
-    expect( s.ask({verb: "is?", argument: "monster"}) ).toEqual({verb: "smile!"});
+    expect( s.ask({verb: "is?", argument: "badge"}) ).toEqual({verb: "smile!"});
   });
 });

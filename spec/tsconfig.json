@@ -10,6 +10,7 @@
     "vector_spec.ts",
     "polar_coordinate_spec.ts",
     "spaceship_spec.ts",
-    "projectile_spec.ts"
+    "projectile_spec.ts",
+    "badge_spec.ts"
   ]
 }
