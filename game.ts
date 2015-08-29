@@ -10,10 +10,12 @@
 /// <reference path="vector.ts" />
 /// <reference path="polar_coordinate.ts" />
 /// <reference path="renderer.ts" />
+/// <reference path="curve.ts" />
 /// <reference path="clock.ts" />
 
-/// <reference path="arena.ts" />
 /// <reference path="dynamic_object.ts" />
+/// <reference path="data_file.ts" />
+
 /// <reference path="player_spaceship.ts" />
 /// <reference path="enemy_spaceship.ts" />
 /// <reference path="projectile.ts" />
@@ -27,20 +29,25 @@ class Game{
   private clock: Clock;
   private isPaused: boolean;
 
-  private arena: Arena;
+  private arena: Curve;
   private dynamicObjects: DynamicObject[];
 
   constructor(r: Renderer) {
     this.renderer = r;
-
     this.clock    = new Clock();
     this.isPaused = false;
 
-    this.arena = new Arena( new Vector(0.0, 0.0), 0.45 );
-
     this.dynamicObjects = [];
-    this.spawnPlayer();
-    this.spawnEnemy();
+    this.arena = new Curve( new Vector(0.0, 0.0), 0.45 );
+
+    new DataFile(
+      "arena.json",
+      (jsonData) => {
+        this.arena.load(jsonData);
+        this.spawnPlayer();
+        this.spawnEnemy();
+      }
+    );
   }
 
   // Single action frame of the game

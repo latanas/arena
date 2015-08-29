@@ -12,37 +12,58 @@
 /// <reference path="color.ts" />
 /// <reference path="renderer.ts" />
 
-// Gameplay arena
+// Curve inflection
 //
-class Arena{
+class CurveInflection extends PolarCoordinateAreal {
+  public smoothing: string;
+
+  constructor(angle:number =0, radius:number =0, areal:number =0, smoothing:string ="smooth") {
+    super(angle, radius, areal);
+    this.smoothing = smoothing;
+  }
+}
+
+// Curve expressed in polar coordinates
+//
+class Curve{
   public origin: Vector;
   public radius: number;
 
-  private inflectionPoints: PolarCoordinateAreal[];
-
-  private computedStep:      number;
-  private computedRadiuses:  PolarCoordinate[];
+  private inflectionPoints: CurveInflection[];
+  private computedStep:     number;
+  private computedRadiuses: PolarCoordinate[];
 
   private color: Color;
 
-  // Construct the arena
-  //
   constructor(o:Vector, r:number) {
     this.origin = o;
     this.radius = r;
 
-    // Add some inflection points
-    this.inflectionPoints = [
-      new PolarCoordinateAreal(Math.PI*0.0, r*1.2, Math.PI * 0.1),
-      new PolarCoordinateAreal(Math.PI*0.2, r*0.9, Math.PI * 0.1),
-      new PolarCoordinateAreal(Math.PI*0.5, r*0.9, Math.PI * 0.1),
-      new PolarCoordinateAreal(Math.PI*0.8, r*0.9, Math.PI * 0.1),
-      new PolarCoordinateAreal(Math.PI*1.0, r*1.2, Math.PI * 0.1),
-      new PolarCoordinateAreal(Math.PI*1.5, r*0.9, Math.PI * 0.3),
-    ]
+    this.inflectionPoints = [];
     this.computedStep = Math.PI*0.01;
-    this.compute();
+    this.computedRadiuses = [];
+
     this.color = new Color(0, 0, 0);
+  }
+
+  // Load curve inflection poitns
+  //
+  public load(jsonData: any[]) {
+    for(var i=0; i<jsonData.length; i++) {
+      var ipData = jsonData[i];
+
+      var ip = new CurveInflection(
+        ipData.angle * Math.PI,
+        ipData.radius * this.radius,
+        ipData.areal * Math.PI
+      );
+
+      if( ip.smoothing ) {
+        ip.smoothing = ipData.smoothing;
+      }
+      this.inflectionPoints.push(ip);
+    }
+    this.compute();
   }
 
   // Get radius at the given polar coordinate
@@ -81,12 +102,12 @@ class Arena{
     }
   }
 
-  // Animate the arena
+  // Animate the curve
   //
   public animate(dt: number) {
   }
 
-  // Render the arena
+  // Render the curve
   //
   public render(renderer: Renderer) {
     var pr = this.computedRadiuses;
@@ -94,9 +115,11 @@ class Arena{
     var points = [];
 
     // Render precomputed outline
-    for( var i=0; i<=pr.length; i++ ) {
-      var p = pr[ (i==pr.length)? 0:i ];
-      points.push( Vector.plus(this.origin, p.vector()) );
+    for( var i=0; i<pr.length; i++ ) {
+      points.push( Vector.plus(this.origin, pr[i].vector()) );
+    }
+    if(pr.length) {
+      points.push( Vector.plus(this.origin, pr[0].vector()) ); // Close the outline
     }
     renderer.style( this.color, 3 );
     renderer.polyline(points);
