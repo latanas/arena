@@ -24,7 +24,7 @@ interface Gradient{
 //
 interface Renderer{
   style(color: Color | Gradient, thickness: number);
-  background();
+  background(position: Vector, scale: number, alpha: number);
 
   polyline(points: Vector[]);
   marker(position: Vector, size: number);
@@ -43,6 +43,8 @@ class CanvasRenderer implements Renderer{
 
   private numberPoints: number;
   private template: Vector[];
+
+  private backgroundImage: HTMLImageElement;
 
   constructor() {
     this.width  = window.innerWidth;
@@ -75,6 +77,9 @@ class CanvasRenderer implements Renderer{
       new Vector( +0.0, +0.0 ),
       new Vector( -0.5, +0.5 ),
     ];
+
+    this.backgroundImage = <HTMLImageElement> (new Image());
+    this.backgroundImage.src = "assets/eso_eagle_nebula.jpg"
   }
 
   public style(color: Color | Gradient, thickness: number) {
@@ -97,8 +102,27 @@ class CanvasRenderer implements Renderer{
     this.context.lineWidth = thickness;
   }
 
-  public background() {
+  public background(position: Vector, scale: number, alpha: number) {
     this.context.clearRect(0, 0, this.width, this.height);
+
+    if( !this.backgroundImage.width ) {
+      return;
+    }
+    var nx = this.backgroundImage.width * scale;
+    var ny = this.backgroundImage.height * scale;
+    var xStart = position.x % nx;
+    var yStart = position.y % ny;
+
+    if( xStart>0 ) xStart = xStart-nx;
+    if( yStart>0 ) yStart = yStart-ny;
+    this.context.globalAlpha = alpha;
+
+    for(var x=xStart; x<this.width; x+=nx) {
+      for(var y=yStart; y<this.height; y+=ny) {
+        this.context.drawImage( this.backgroundImage, x, y, nx, ny);
+      }
+    }
+    this.context.globalAlpha = 1.0;
   }
 
   public polyline(points: Vector[]) {

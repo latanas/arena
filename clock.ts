@@ -10,11 +10,11 @@
 // Animation clock
 //
 class Clock{
-  private clock: number;
-  private fpsUpdateTime: number;
+  public clock: number; // Absolute time
+  public dt:    number; // Time delta
+  public fps:   number; // Frames per second
 
-  public dt:  number; // Time delta
-  public fps: number; // Frames per second
+  private fpsUpdateTime: number;
 
   constructor() {
     this.clock = window.performance.now();

@@ -29,6 +29,9 @@ class Curve{
   public origin: Vector;
   public radius: number;
 
+  public color:     Color;
+  public thickness: number;
+
   private inflectionPoints: CurveInflection[];
 
   private computedStep:     number;
@@ -36,8 +39,6 @@ class Curve{
 
   private morphTargetComputed: PolarCoordinate[];
   private morphTargetWeight:   number;
-
-  private color: Color;
 
   constructor(o:Vector, r:number) {
     this.origin = o;
@@ -52,7 +53,8 @@ class Curve{
     this.morphTargetComputed = null;
     this.morphTargetWeight   = 0.0;
 
-    this.color = new Color(0, 0, 0);
+    this.color = new Color(1.0, 1.0, 1.0);
+    this.thickness = 10;
   }
 
   // Load curve inflection poitns
@@ -193,7 +195,7 @@ class Curve{
     if(pr.length) {
       points.push( makePoint(0) ); // Close the outline
     }
-    renderer.style( this.color, 3 );
+    renderer.style( this.color, this.thickness );
     renderer.polyline(points);
 
     // Render the inflection points, for debugging

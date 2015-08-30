@@ -29,8 +29,12 @@ class Game{
   private clock: Clock;
   private isPaused: boolean;
 
-  private arenaList: Curve[];
   private dynamicObjects: DynamicObject[];
+
+  private arenaList: Curve[];
+  private arenaBackgroundPosition: Vector;
+  private arenaBackgroundScale: number;
+  private arenaBackgroundAlpha: number;
 
   constructor(r: Renderer) {
     this.renderer = r;
@@ -38,6 +42,9 @@ class Game{
     this.isPaused = false;
 
     this.dynamicObjects = [];
+    this.arenaBackgroundPosition = new Vector();
+    this.arenaBackgroundScale = 1.0;
+    this.arenaBackgroundAlpha = 1.0;
 
     // Initialize two empty arenas
     this.arenaList = [
@@ -79,7 +86,7 @@ class Game{
   //
   private render() {
     var r = this.renderer;
-    r.background();
+    r.background( this.arenaBackgroundPosition, this.arenaBackgroundScale, this.arenaBackgroundAlpha);
 
     this.arena().render(r);
 
@@ -94,6 +101,10 @@ class Game{
   // Make things move
   //
   private animate(dt: number) {
+    this.arenaBackgroundPosition.x -= dt * 30.0;
+    this.arenaBackgroundPosition.y += dt * 2.0;
+    this.arenaBackgroundScale = (Math.sin( this.clock.clock*0.00008 )+1.0)*0.2+0.6;
+    this.arenaBackgroundAlpha = (Math.sin( this.clock.clock*0.002 )+1.0)*0.08 + 0.6;
     this.arena().animate(dt);
 
     // Dynamic objects

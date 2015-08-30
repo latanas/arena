@@ -1,6 +1,10 @@
 html, body, canvas{
   margin:  0px;
   padding: 0px;
+
+  color: white;
+  background-color: black;
+
   font-family: Helvetica, sans-serif;
 }
 
@@ -31,7 +35,7 @@ canvas{
   margin:  0px;
   padding: 0px;
 
-  background-color: white;
+  background-color: black;
   opacity:          0.0;
   transition:       opacity 1.5s ease;
 
