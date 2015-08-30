@@ -29,7 +29,7 @@ class Game{
   private clock: Clock;
   private isPaused: boolean;
 
-  private arena: Curve;
+  private arenaList: Curve[];
   private dynamicObjects: DynamicObject[];
 
   constructor(r: Renderer) {
@@ -38,16 +38,31 @@ class Game{
     this.isPaused = false;
 
     this.dynamicObjects = [];
-    this.arena = new Curve( new Vector(0.0, 0.0), 0.45 );
 
+    // Initialize two empty arenas
+    this.arenaList = [
+      new Curve( new Vector(0.0, 0.0), 0.45 ),
+      new Curve( new Vector(0.0, 0.0), 0.35 ),
+    ];
+
+    // Load data into one arena, and set it as morph target
     new DataFile(
       "arena.json",
       (jsonData) => {
-        this.arena.load(jsonData);
+        this.arenaList[0].load(jsonData);
+        this.arenaList[1].animationMorphTarget( this.arenaList[0].compute() );
+
         this.spawnPlayer();
-        this.spawnEnemy();
+        setTimeout(()=>{ this.spawnEnemy(); }, 1500);
       }
     );
+  }
+
+  // Currently active arena
+  //
+  public arena(): Curve{
+    var i:number = this.arenaList[1].animationMorphCompleted()? 0:1;
+    return this.arenaList[i];
   }
 
   // Single action frame of the game
@@ -64,22 +79,22 @@ class Game{
   //
   private render() {
     var r = this.renderer;
-
     r.background();
-    this.arena.render(r);
+
+    this.arena().render(r);
 
     for( var i=0; i<this.dynamicObjects.length; i++) {
       var o = this.dynamicObjects[i];
 
       if( !o ) continue;
-      o.render(r, this.arena.origin);
+      o.render(r, this.arena().origin);
     }
   }
 
   // Make things move
   //
   private animate(dt: number) {
-    this.arena.animate(dt);
+    this.arena().animate(dt);
 
     // Dynamic objects
     //
@@ -89,7 +104,7 @@ class Game{
       o.animate(dt, 0.0);
 
       // Ask the object to follow arena contour
-      o.ask({ verb: "follow!", argument: this.arena.radiusAt( o.position.angle ) })
+      o.ask({ verb: "follow!", argument: this.arena().computedRadiusAt( o.position.angle ) })
 
       // Ask the object if it wants to attack
       var attack = o.ask({verb: "attack?"});
