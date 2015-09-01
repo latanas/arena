@@ -40,12 +40,12 @@ class Projectile implements DynamicObject {
     this.ttlGhostMax = 0.5;
     this.ttlGhost    = 0.5;
 
-    this.color = new Color(1.0, 0.0, 0.0);
+    this.color = new Color(1.0, 0.2, 0.2);
   }
 
   public animate(dt: number, origin_speed: number) {
     this.position.radius += dt * this.speed;
-    this.positionInitial.radius += dt * (this.speed * 0.8);
+    this.positionInitial.radius += dt * (this.speed * 0.7);
     this.ttl -= dt;
     this.ttlGhost -= dt;
   }

@@ -13,11 +13,14 @@
 //
 class PlayerSpaceship extends Spaceship{
   private playerScore: number;
+  private swing: number;
 
   constructor(p: PolarCoordinate) {
     super(p);
 
+    this.hpMax = this.hp = 40.0;
     this.playerScore = 0;
+    this.swing = 0.0;
 
     document.addEventListener('keydown', (e) => {
       if( e.keyCode == 37 ) this.direction = +1;
@@ -29,6 +32,16 @@ class PlayerSpaceship extends Spaceship{
       if( e.keyCode == 39 ) this.direction = 0;
     });
     document.getElementById("game_over").style.opacity = "0.0";
+  }
+
+  public animate(dt: number, origin_speed: number) {
+    super.animate(dt, origin_speed);
+    this.swing += 0.3*dt;
+  }
+
+  public render(renderer: Renderer, origin: Vector) {
+    super.render(renderer, origin);
+    renderer.rotation( this.position.angle - Math.PI*(Math.sin(this.swing)*0.04 + 0.5) );
   }
 
   // Ask the spaceship

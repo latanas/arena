@@ -24,6 +24,7 @@ interface Gradient{
 //
 interface Renderer{
   style(color: Color | Gradient, thickness: number);
+  rotation(angle: number);
   background(position: Vector, scale: number, alpha: number);
 
   polyline(points: Vector[]);
@@ -38,6 +39,7 @@ class CanvasRenderer implements Renderer{
   private width:   number;
   private height:  number;
 
+  private angle:   number;
   private scale:   number;
   private origin:  Vector;
 
@@ -67,6 +69,8 @@ class CanvasRenderer implements Renderer{
       this.scale = Math.min(this.width, this.height);
       this.origin = new Vector(this.width/2.0, this.height/2.0);
     });
+
+    this.angle = 0.0;
 
     this.template = [
       new Vector( -0.5, +0.5 ),
@@ -102,8 +106,17 @@ class CanvasRenderer implements Renderer{
     this.context.lineWidth = thickness;
   }
 
+  public rotation(angle: number) {
+    this.angle = angle;
+  }
+
   public background(position: Vector, scale: number, alpha: number) {
-    this.context.clearRect(0, 0, this.width, this.height);
+    var o = this.origin;
+
+    this.context.setTransform(1.0, 0.0, 0.0, 1.0, 0.0, 0.0 );
+    this.context.translate( o.x, o.y );
+    this.context.rotate( -1.0*this.angle );
+    this.context.translate( -1.0*o.x, -1.0*o.y);
 
     if( !this.backgroundImage.width ) {
       return;
@@ -119,7 +132,8 @@ class CanvasRenderer implements Renderer{
 
     for(var x=xStart; x<this.width; x+=nx) {
       for(var y=yStart; y<this.height; y+=ny) {
-        this.context.drawImage( this.backgroundImage, x, y, nx, ny);
+        this.context.clearRect(x, y, nx, ny);
+        this.context.drawImage(this.backgroundImage, x, y, nx, ny);
       }
     }
     this.context.globalAlpha = 1.0;

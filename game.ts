@@ -101,9 +101,9 @@ class Game{
   // Make things move
   //
   private animate(dt: number) {
-    this.arenaBackgroundPosition.x -= dt * 30.0;
-    this.arenaBackgroundPosition.y += dt * 2.0;
-    this.arenaBackgroundScale = (Math.sin( this.clock.clock*0.00008 )+1.0)*0.2+0.6;
+    this.arenaBackgroundPosition.x -= dt * 5.0;
+    this.arenaBackgroundPosition.y += dt * 0.5;
+    this.arenaBackgroundScale = (Math.sin( this.clock.clock*0.00007 )+1.0)*0.2+0.7;
     this.arenaBackgroundAlpha = (Math.sin( this.clock.clock*0.002 )+1.0)*0.08 + 0.6;
     this.arena().animate(dt);
 
