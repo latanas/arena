@@ -19,15 +19,12 @@
 class Spaceship implements DynamicObject{
   public speed:    number;
   public position: PolarCoordinateAreal;
+  public direction: number;
 
   public hp: number;
   public hpMax: number;
 
-  public direction: number;
-
   public color: Color;
-  protected colorHp: Color;
-  protected colorBar: Color;
 
   protected projectile: Projectile;
 
@@ -39,9 +36,7 @@ class Spaceship implements DynamicObject{
     this.projectile = null;
 
     this.hpMax = this.hp = 10.0;
-    this.color = new Color(1.0, 1.0, 1.0);
-    this.colorHp = new Color(1.0, 0.0, 0.0);
-    this.colorBar = new Color(0.5, 0.5, 0.5)
+    this.color = new Color(0.0, 1.0, 0.0);
   }
 
   public animate(dt: number, origin_speed: number) {
@@ -56,7 +51,7 @@ class Spaceship implements DynamicObject{
 
     renderer.style( this.color, 1 );
     renderer.spaceship( p, this.position.angle - Math.PI*0.5, this.position.areal );
-    renderer.style( this.colorHp, 3 );
+    renderer.style( this.color, 3 );
     renderer.polyline([
       Vector.plus( p, new Vector((-0.5)*hpPos, (+1.0)*hpPos)),
       Vector.plus( p, new Vector(hpStatus*hpPos, (+1.0)*hpPos))
@@ -105,7 +100,8 @@ class Spaceship implements DynamicObject{
     var p = this.position.copy();
 
     this.projectile = new Projectile(
-        new PolarCoordinate(p.angle, p.radius)
+        new PolarCoordinate(p.angle, p.radius),
+        this.color
     );
   }
 }

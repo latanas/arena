@@ -1,0 +1,7 @@
+[
+  { "angle": 0.0, "radius": 0.8, "areal": 0.4 },
+  { "angle": 1.0, "radius": 0.8, "areal": 0.4 },
+
+  { "angle": 0.5, "radius": 0.8, "areal": 0.3 },
+  { "angle": 1.5, "radius": 0.8, "areal": 0.3 }
+]

@@ -1,8 +1,0 @@
-[
-  { "angle": 0.0, "radius": 1.2, "areal": 0.1 },
-  { "angle": 0.2, "radius": 0.9, "areal": 0.1 },
-  { "angle": 0.5, "radius": 0.9, "areal": 0.1 },
-  { "angle": 0.8, "radius": 0.9, "areal": 0.1 },
-  { "angle": 1.0, "radius": 1.2, "areal": 0.1 },
-  { "angle": 1.5, "radius": 0.9, "areal": 0.3 }
-]

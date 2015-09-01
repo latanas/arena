@@ -18,6 +18,8 @@ class PlayerSpaceship extends Spaceship{
   constructor(p: PolarCoordinate) {
     super(p);
 
+    this.color = new Color(1.0, 1.0, 1.0);
+
     this.hpMax = this.hp = 40.0;
     this.playerScore = 0;
     this.swing = 0.0;

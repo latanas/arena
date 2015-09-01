@@ -29,7 +29,7 @@ class Projectile implements DynamicObject {
 
   private color: Color;
 
-  constructor(p: PolarCoordinate) {
+  constructor(p: PolarCoordinate, color: Color = new Color(1.0, 0.2, 0.2)) {
     this.speed = -1.0;
     this.position = new PolarCoordinateAreal(p.angle, p.radius, 0.05);
     this.positionInitial = p.copy();
@@ -40,7 +40,7 @@ class Projectile implements DynamicObject {
     this.ttlGhostMax = 0.5;
     this.ttlGhost    = 0.5;
 
-    this.color = new Color(1.0, 0.2, 0.2);
+    this.color = color;
   }
 
   public animate(dt: number, origin_speed: number) {

@@ -46,23 +46,12 @@ class Game{
     this.arenaBackgroundScale = 1.0;
     this.arenaBackgroundAlpha = 1.0;
 
-    // Initialize two empty arenas
-    this.arenaList = [
-      new Curve( new Vector(0.0, 0.0), 0.45 ),
-      new Curve( new Vector(0.0, 0.0), 0.35 ),
-    ];
-
-    // Load data into one arena, and set it as morph target
-    new DataFile(
-      "arena.json",
-      (jsonData) => {
-        this.arenaList[0].load(jsonData);
-        this.arenaList[1].animationMorphTarget( this.arenaList[0].compute() );
-
-        this.spawnPlayer();
-        setTimeout(()=>{ this.spawnEnemy(); }, 1500);
-      }
-    );
+    // Initialize game arena
+    this.arenaList = [ null, null ];
+    this.spawnArena(()=>{
+       this.spawnPlayer();
+       setTimeout(()=>{ this.spawnEnemy(); }, 1500);
+    });
   }
 
   // Currently active arena
@@ -146,6 +135,7 @@ class Game{
         else if( o.ask({ verb: "is?", argument: "spaceship" }).verb == "is!" ) {
           this.spawnObject( new Badge() );
           setTimeout(this.spawnEnemy, 3000);
+          setTimeout(this.spawnArena, 4000);
         }
         this.dynamicObjects[i] = null;
       }
@@ -166,7 +156,7 @@ class Game{
 
   // Spawn a new enemy spaceship
   //
-  spawnEnemy = () => {
+  public spawnEnemy = () => {
     console.log("Respawn spaceship.");
     this.spawnObject(
       new EnemySpaceship( new PolarCoordinate( /*Math.random()*Math.PI*0.5 + 1.2*/(-0.5)*Math.PI, 0.4) )
@@ -175,7 +165,7 @@ class Game{
 
   // Spawn a new player spaceship
   //
-  spawnPlayer = () => {
+  public spawnPlayer = () => {
     console.log("Respawn player.");
 
     this.isPaused = false;
@@ -183,6 +173,31 @@ class Game{
 
     this.spawnObject(
       new PlayerSpaceship( new PolarCoordinate(Math.PI*0.5, 0.4) )
+    );
+  }
+
+  // Spawn randomly selected arena
+  //
+  public spawnArena = (done: ()=>void) => {
+    if( this.arenaList[0] ) {
+      this.arenaList[1] = this.arenaList[0];
+    }
+    else {
+      this.arenaList[1] = new Curve( new Vector(0.0, 0.0), 0.35 );
+    }
+    this.arenaList[0] = new Curve( new Vector(0.0, 0.0), 0.45 );
+
+    // Load data into the arena object, and set it as morph target
+    var arenaCount = 6;
+    var arenaIndex = Math.round( Math.random() * (arenaCount-1) );
+
+    new DataFile(
+      "arena_" + arenaIndex + ".json",
+      (jsonData) => {
+        this.arenaList[0].load(jsonData);
+        this.arenaList[1].animationMorphTarget( this.arenaList[0].compute() );
+        if( done ) done();
+      }
     );
   }
 }

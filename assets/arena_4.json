@@ -1,0 +1,12 @@
+[
+  { "angle": 0.0, "radius": 0.8, "areal": 0.1 },
+  { "angle": 0.2, "radius": 0.8, "areal": 0.1 },
+  { "angle": 0.4, "radius": 0.8, "areal": 0.8 },
+  { "angle": 0.6, "radius": 0.8, "areal": 0.8 },
+  { "angle": 0.8, "radius": 0.8, "areal": 0.1 },
+  { "angle": 1.0, "radius": 0.8, "areal": 0.1 },
+  { "angle": 1.2, "radius": 0.8, "areal": 0.1 },
+  { "angle": 1.4, "radius": 0.8, "areal": 0.1 },
+  { "angle": 1.6, "radius": 0.8, "areal": 0.1 },
+  { "angle": 1.8, "radius": 0.8, "areal": 0.1 }
+]
