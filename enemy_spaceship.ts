@@ -73,7 +73,7 @@ class EnemySpaceship extends Spaceship{
         var distance = a2 - a1;
 
         // Player has collided with us, make an evasive jump
-        if( Math.abs(distance) < 0.5*Math.PI ) {
+        if( Math.abs(distance) < 0.4*Math.PI ) {
 
           this.numberShots = 0;
           this.prepareJump(this.charge);
