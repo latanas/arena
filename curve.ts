@@ -203,7 +203,7 @@ class Curve{
 
     renderer.style( this.color, 1 );
     for( var n=0; n<ip.length; n++ ) {
-      renderer.marker( Vector.plus(this.origin, ip[n].vector()), 10 );
+      renderer.marker( Vector.plus(this.origin, ip[n].vector()), 10, 1.0 );
     }
   }
 }

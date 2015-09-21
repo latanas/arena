@@ -55,6 +55,11 @@ class PlayerSpaceship extends Spaceship{
       return { verb: "gameover!" };
     }
 
+    // Somebody asked us if we are the player ship
+    if( (sentence.verb == "is?") && (sentence.argument == "player") ) {
+      return { verb: "is!" };
+    }
+
     // Otherwise, ask the parent
     return super.ask(sentence);
   }

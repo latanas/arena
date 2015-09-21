@@ -61,7 +61,7 @@ class Projectile implements DynamicObject {
       end: pt[1], endColor: new Color(this.color.r, this.color.g, this.color.b, 0.0),
     };
 
-    renderer.style(gradient, 5 );
+    renderer.style(gradient, 6 );
     renderer.polyline(pt);
   }
 

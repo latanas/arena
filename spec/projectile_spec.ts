@@ -34,7 +34,7 @@ describe("Projectile", () => {
   it("should respond to 'collide?' communication", () => {
     var p1:Projectile = new Projectile( new PolarCoordinate() );
     var p2:Projectile = new Projectile( new PolarCoordinate() );
-    var s2:Spaceship  = new Spaceship( new PolarCoordinate() );
+    var s2:Spaceship  = new Spaceship( new PolarCoordinate(0.0, 0.05) );
 
     expect( p1.ask({verb: "collide?", argument: p2}) ).toEqual( {verb: "smile!"} );
     expect( p1.ask({verb: "collide?", argument: s2}) ).toEqual( {verb: "smile!"} );

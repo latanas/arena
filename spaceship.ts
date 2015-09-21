@@ -17,9 +17,9 @@
 // Base class for a spaceship
 //
 class Spaceship implements DynamicObject{
-  public speed:    number;
-  public position: PolarCoordinateAreal;
+  public speed: number;
   public direction: number;
+  public position:  PolarCoordinateAreal;
 
   public hp: number;
   public hpMax: number;
@@ -28,37 +28,68 @@ class Spaceship implements DynamicObject{
 
   protected projectile: Projectile;
 
-  constructor(p: PolarCoordinate) {
-    this.position = new PolarCoordinateAreal(p.angle, p.radius, 0.05);
-    this.speed = 1.0;
+  protected isJumping:  boolean;
+  protected jumpAngle:  number;
+  protected jumpRadius: number;
+  protected jumpDone:   ()=>void;
 
-    this.direction = +0;
+  constructor(p: PolarCoordinate) {
+    this.position = new PolarCoordinateAreal(p.angle, p.radius - 0.05, 0.05);
+    this.speed    = 1.0;
+
+    this.direction  = +0;
     this.projectile = null;
 
-    this.hpMax = this.hp = 10.0;
+    this.hpMax = 10.0;
+    this.hp    = 10.0;
+
     this.color = new Color(0.0, 1.0, 0.0);
+
+    this.isJumping  = false;
+    this.jumpAngle  = 0.0;
+    this.jumpRadius = 1.0;
   }
 
+  // Animate the spaceship
+  //
   public animate(dt: number, origin_speed: number) {
-    this.position.angle += dt * (this.speed + origin_speed) * this.direction;
+    // If the ship is in the process of jumping, animate the radius and angle
+    if( this.isJumping ) {
+
+      this.position.radius += this.speed * dt;
+      this.jumpAngle += 2.0 * (this.position.angle - this.jumpAngle) * dt;
+
+      if( this.position.radius >= this.jumpRadius ) {
+        this.position.radius = this.jumpRadius;
+        this.isJumping = false;
+
+        if( this.jumpDone ) this.jumpDone();
+      }
+    }
+    else {
+      // Otherwise, animate only the angle
+      this.position.angle += dt * (this.speed + origin_speed) * this.direction;
+    }
   }
 
+  // Display the spaceship
+  //
   public render(renderer: Renderer, origin: Vector) {
-    var v:Vector = this.position.vector()
-    var p:Vector = Vector.plus( v, origin );
-    var hpStatus = (this.hp / this.hpMax)-0.5;
-    var hpPos = this.position.areal*0.6;
+    var position: Vector = Vector.plus( this.position.vector(), origin );
+    var angle: number = (this.isJumping? this.jumpAngle : this.position.angle) - Math.PI*0.5;
 
     renderer.style( this.color, 1 );
-    renderer.spaceship( p, this.position.angle - Math.PI*0.5, this.position.areal );
-    renderer.style( this.color, 3 );
-    renderer.polyline([
-      Vector.plus( p, new Vector((-0.5)*hpPos, (+1.0)*hpPos)),
-      Vector.plus( p, new Vector(hpStatus*hpPos, (+1.0)*hpPos))
-    ]);
+    renderer.spaceship( position, angle, this.position.areal );
+
+    renderer.style( new Color(this.color.r, this.color.g, this.color.b, 0.5), 10.0 );
+    renderer.marker( position, 2.0, 1.0);
+
+    renderer.style( this.color, 3.0 );
+    renderer.marker( position, 10.0, this.hp / this.hpMax);
   }
 
-  // Ask the spaceship
+  // Communicate with the spaceship
+  //
   public ask(sentence: DynamicMessage): DynamicMessage {
     // Somebody asked the Spaceship if it's time to get discarded
     if( sentence.verb == "discard?" && this.hp <= 0 ) {
@@ -66,9 +97,13 @@ class Spaceship implements DynamicObject{
       return { verb: "discard!" };
     }
 
-    // Somebody asked the Spaceship to follow to new position, it knows how to do this
+    // Somebody asked the Spaceship to follow to new position
     if( sentence.verb == "follow!" ) {
-      this.position.radius = <number> sentence.argument - 0.05;
+      var jumpRadius = <number> sentence.argument - 0.05;
+
+      if( this.isJumping ) this.jumpRadius = jumpRadius; // Set new follow target
+      else this.position.radius = jumpRadius;              // Follow immediately
+
       return { verb: "follow!" };
     }
 
@@ -95,7 +130,8 @@ class Spaceship implements DynamicObject{
     return { verb: "smile!" };
   }
 
-  // Prepare for attach
+  // Prepare for attack
+  //
   public prepareAttack(){
     var p = this.position.copy();
 
@@ -103,5 +139,16 @@ class Spaceship implements DynamicObject{
         new PolarCoordinate(p.angle, p.radius),
         this.color
     );
+  }
+
+  // Prepare for evasive jump
+  //
+  public prepareJump(done: ()=>void){
+    this.isJumping = true;
+    this.jumpAngle = this.position.angle;
+    this.jumpDone  = done;
+
+    this.position.angle  = this.position.angle - Math.PI;
+    this.position.radius = (-1.0)*this.position.radius;
   }
 }

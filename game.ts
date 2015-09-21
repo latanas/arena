@@ -66,8 +66,11 @@ class Game{
   actionFrame = () => {
     var dt = this.clock.tick();
 
-    this.render();
-    if( !this.isPaused ) this.animate(dt);
+    if( !this.isPaused ) {
+      this.render();
+      this.animate(dt);
+    }
+
     window.requestAnimationFrame( this.actionFrame );
   }
 
@@ -157,9 +160,13 @@ class Game{
   // Spawn a new enemy spaceship
   //
   public spawnEnemy = () => {
-    console.log("Respawn spaceship.");
+    console.log("Respawn enemy.");
+
+    var angle  = (-0.5)*Math.PI;
+    var radius = this.arena().computedRadiusAt(angle);
+
     this.spawnObject(
-      new EnemySpaceship( new PolarCoordinate( /*Math.random()*Math.PI*0.5 + 1.2*/(-0.5)*Math.PI, 0.4) )
+      new EnemySpaceship( new PolarCoordinate(angle, radius) )
     );
   }
 
@@ -171,8 +178,11 @@ class Game{
     this.isPaused = false;
     this.dynamicObjects.length = 0;
 
+    var angle  = Math.PI*0.5;
+    var radius = this.arena().computedRadiusAt(angle);
+
     this.spawnObject(
-      new PlayerSpaceship( new PolarCoordinate(Math.PI*0.5, 0.4) )
+      new PlayerSpaceship( new PolarCoordinate(angle, radius) )
     );
   }
 

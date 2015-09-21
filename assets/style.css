@@ -46,3 +46,13 @@ canvas{
   display:    inline-block;
   margin-top: 15%;
 }
+
+.game_info{
+  z-index:  999;
+  position: fixed;
+
+  bottom: 5px;
+  left:   20px;
+
+  font-size: 12px;
+}

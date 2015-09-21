@@ -13,7 +13,7 @@ describe("Spaceship", () => {
     var s:Spaceship = new Spaceship( new PolarCoordinate(0.1, 0.2) );
 
     expect(s.position.angle).toEqual(0.1);
-    expect(s.position.radius).toEqual(0.2);
+    expect(s.position.radius).toEqual(0.2 - 0.05);
   });
 
   it("should animate position", () => {

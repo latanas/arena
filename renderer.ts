@@ -28,7 +28,7 @@ interface Renderer{
   background(position: Vector, scale: number, alpha: number);
 
   polyline(points: Vector[]);
-  marker(position: Vector, size: number);
+  marker(position: Vector, size: number, turn: number);
   spaceship(position: Vector, size: number, angle: number);
 }
 
@@ -78,7 +78,7 @@ class CanvasRenderer implements Renderer{
       new Vector( +0.0, -0.5 ),
       new Vector( +0.5, +0.0 ),
       new Vector( +0.5, +0.5 ),
-      new Vector( +0.0, +0.0 ),
+      new Vector( +0.0, +0.3 ),
       new Vector( -0.5, +0.5 ),
     ];
 
@@ -155,13 +155,16 @@ class CanvasRenderer implements Renderer{
     this.context.stroke();
   }
 
-  public marker(position: Vector, size: number) {
+  public marker(position: Vector, size: number, turn: number) {
     var s = this.scale;
     var o = this.origin;
 
+    this.context.lineCap = "butt";
     this.context.beginPath();
-    this.context.arc( position.x*s + o.x, position.y*s + o.y, size, 0, 2*Math.PI );
+
+    this.context.arc( position.x*s + o.x, position.y*s + o.y, size, 0, turn*2.0*Math.PI );
     this.context.stroke();
+    this.context.lineCap = "round";
   }
 
   public spaceship(position: Vector, angle: number, size: number) {
