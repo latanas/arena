@@ -34,7 +34,6 @@ class Game{
   private arenaList: Curve[];
   private arenaBackgroundPosition: Vector;
   private arenaBackgroundScale: number;
-  private arenaBackgroundAlpha: number;
 
   constructor(r: Renderer) {
     this.renderer = r;
@@ -44,7 +43,6 @@ class Game{
     this.dynamicObjects = [];
     this.arenaBackgroundPosition = new Vector();
     this.arenaBackgroundScale = 1.0;
-    this.arenaBackgroundAlpha = 1.0;
 
     // Initialize game arena
     this.arenaList = [ null, null ];
@@ -78,7 +76,7 @@ class Game{
   //
   private render() {
     var r = this.renderer;
-    r.background( this.arenaBackgroundPosition, this.arenaBackgroundScale, this.arenaBackgroundAlpha);
+    r.background( this.arenaBackgroundPosition, this.arenaBackgroundScale);
 
     this.arena().render(r);
 
@@ -96,7 +94,6 @@ class Game{
     this.arenaBackgroundPosition.x -= dt * 5.0;
     this.arenaBackgroundPosition.y += dt * 0.5;
     this.arenaBackgroundScale = (Math.sin( this.clock.clock*0.00007 )+1.0)*0.2+0.7;
-    this.arenaBackgroundAlpha = (Math.sin( this.clock.clock*0.002 )+1.0)*0.08 + 0.6;
     this.arena().animate(dt);
 
     // Dynamic objects

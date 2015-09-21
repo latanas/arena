@@ -25,7 +25,7 @@ interface Gradient{
 interface Renderer{
   style(color: Color | Gradient, thickness: number);
   rotation(angle: number);
-  background(position: Vector, scale: number, alpha: number);
+  background(position: Vector, scale: number);
 
   polyline(points: Vector[]);
   marker(position: Vector, size: number, turn: number);
@@ -46,6 +46,7 @@ class CanvasRenderer implements Renderer{
   private numberPoints: number;
   private template: Vector[];
 
+  private hasBackgroundImage: boolean;
   private backgroundImage: HTMLImageElement;
 
   constructor() {
@@ -82,7 +83,10 @@ class CanvasRenderer implements Renderer{
       new Vector( -0.5, +0.5 ),
     ];
 
-    this.backgroundImage = <HTMLImageElement> (new Image());
+    this.hasBackgroundImage = false;
+    this.backgroundImage    = <HTMLImageElement> (new Image());
+
+    this.backgroundImage.addEventListener("load", ()=>{ this.hasBackgroundImage = true; });
     this.backgroundImage.src = "assets/eso_eagle_nebula.jpg"
   }
 
@@ -110,7 +114,7 @@ class CanvasRenderer implements Renderer{
     this.angle = angle;
   }
 
-  public background(position: Vector, scale: number, alpha: number) {
+  public background(position: Vector, scale: number) {
     var o = this.origin;
 
     this.context.setTransform(1.0, 0.0, 0.0, 1.0, 0.0, 0.0 );
@@ -118,25 +122,24 @@ class CanvasRenderer implements Renderer{
     this.context.rotate( -1.0*this.angle );
     this.context.translate( -1.0*o.x, -1.0*o.y);
 
-    if( !this.backgroundImage.width ) {
+    if( !this.hasBackgroundImage ) {
+      this.context.clearRect(0, 0, this.width, this.height);
       return;
     }
+
     var nx = this.backgroundImage.width * scale;
     var ny = this.backgroundImage.height * scale;
     var xStart = position.x % nx;
     var yStart = position.y % ny;
 
     if( xStart>0 ) xStart = xStart-nx;
-    if( yStart>0 ) yStart = yStart-ny;
-    this.context.globalAlpha = alpha;
+    if( yStart>0 ) yStart = yStart-ny;;
 
     for(var x=xStart; x<this.width; x+=nx) {
       for(var y=yStart; y<this.height; y+=ny) {
-        this.context.clearRect(x, y, nx, ny);
         this.context.drawImage(this.backgroundImage, x, y, nx, ny);
       }
     }
-    this.context.globalAlpha = 1.0;
   }
 
   public polyline(points: Vector[]) {
