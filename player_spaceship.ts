@@ -20,7 +20,7 @@ class PlayerSpaceship extends Spaceship{
 
     this.color = new Color(1.0, 1.0, 1.0);
 
-    this.hpMax = this.hp = 40.0;
+    this.hpMax = this.hp = 50.0;
     this.playerScore = 0;
     this.swing = 0.0;
 

@@ -48,7 +48,7 @@ class Game{
     this.arenaList = [ null, null ];
     this.spawnArena(()=>{
        this.spawnPlayer();
-       setTimeout(()=>{ this.spawnEnemy(); }, 1500);
+       setTimeout(()=>{ this.spawnEnemy(); }, 3500);
     });
   }
 

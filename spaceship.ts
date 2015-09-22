@@ -143,7 +143,7 @@ class Spaceship implements DynamicObject{
 
   // Prepare for evasive jump
   //
-  public prepareJump(done: ()=>void){
+  public prepareJump( done: ()=>void = null ){
     this.isJumping = true;
     this.jumpAngle = this.position.angle;
     this.jumpDone  = done;
