@@ -49,7 +49,7 @@ class Game{
     this.spawnArena(()=>{
        this.spawnPlayer();
        setTimeout(()=>{ this.spawnEnemy(); }, 3500);
-    });
+    }, 1);
   }
 
   // Currently active arena
@@ -93,7 +93,7 @@ class Game{
   private animate(dt: number) {
     this.arenaBackgroundPosition.x -= dt * 5.0;
     this.arenaBackgroundPosition.y += dt * 0.5;
-    this.arenaBackgroundScale = (Math.sin( this.clock.clock*0.00007 )+1.0)*0.2+0.7;
+    this.arenaBackgroundScale = (Math.sin( this.clock.clock*0.00008 )+1.0)*0.2 + 0.8;
     this.arena().animate(dt);
 
     // Dynamic objects
@@ -185,7 +185,7 @@ class Game{
 
   // Spawn randomly selected arena
   //
-  public spawnArena = (done: ()=>void) => {
+  public spawnArena = ( done: ()=>void, arenaIndex = null ) => {
     if( this.arenaList[0] ) {
       this.arenaList[1] = this.arenaList[0];
     }
@@ -195,8 +195,12 @@ class Game{
     this.arenaList[0] = new Curve( new Vector(0.0, 0.0), 0.45 );
 
     // Load data into the arena object, and set it as morph target
+    //
     var arenaCount = 6;
-    var arenaIndex = Math.round( Math.random() * (arenaCount-1) );
+
+    if( arenaIndex === null ) {
+      arenaIndex = Math.round( Math.random() * (arenaCount-1) );
+    }
 
     new DataFile(
       "arena_" + arenaIndex + ".json",

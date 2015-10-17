@@ -30,8 +30,11 @@ class EnemySpaceship extends Spaceship{
     this.tAttack    = this.tAttackMax*1.0;
 
     this.tJumpMax = 9.0;
-    this.tJump    = this.tJumpMax*1.0;
+    this.randomizeNextJump();
+  }
 
+  private randomizeNextJump() {
+    this.tJump = (Math.random()*0.5 + 0.5) * this.tJumpMax;
     this.numberShots = 0;
   }
 
@@ -53,9 +56,7 @@ class EnemySpaceship extends Spaceship{
 
     if( this.tJump <= 0 ) {
       this.prepareJump();
-
-      this.tJump = (Math.random()*0.5 + 0.5) * this.tJumpMax;
-      this.numberShots = 0;
+      this.randomizeNextJump();
     }
   }
 

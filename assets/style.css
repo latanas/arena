@@ -6,6 +6,7 @@ html, body, canvas{
   background-color: black;
 
   font-family: Helvetica, sans-serif;
+  font-size: 12px;
 }
 
 canvas{
@@ -20,6 +21,18 @@ canvas{
 
   left: 50px;
   top:  50px;
+}
+
+.key{
+  margin:  3px;
+  padding: 3px;
+  border-radius: 3px;
+
+  font-weight: 700;
+  font-size:   14px;
+
+  background-color: white;
+  color: black;
 }
 
 .game_over{
@@ -53,6 +66,4 @@ canvas{
 
   bottom: 5px;
   left:   20px;
-
-  font-size: 12px;
 }
